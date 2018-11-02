@@ -1,0 +1,37 @@
+.sidebar{
+    text-align: left;
+}
+.closed{
+    border-bottom: 1px solid #f2f2f2;
+}
+.sidebar-leaf{
+    background-color: #f9f9f9;
+}
+.sidebar-link, .sidebar-leaf{
+    cursor: pointer;
+    padding: 0.5em;
+    color: #497bb7;
+}
+.open{
+    background-color: #f2f2f2;
+    color: #333;
+}
+.closed>p::before, .open>p::before {
+    font-family: "Font Awesome 5 Free";
+    display: inline-block;
+    padding-right: 1em;
+    font-weight: 900;
+}
+.closed>p::before {
+    content: "\F0DA";
+}
+.open>p::before {
+    content: "\F0D7";
+    margin-right: -4px;
+    color: #333;
+}
+
+.sidebar-text{
+    margin: 0;
+    padding: 0;
+}

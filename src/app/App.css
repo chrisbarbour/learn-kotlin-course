@@ -1,0 +1,62 @@
+body {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #000;
+  height: 160px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.App-ticker {
+  font-size: medium;
+}
+.contents{
+    display: flex;
+}
+.contents>div:nth-child(1){
+    flex-grow: 1
+}
+.contents>div:nth-child(2){
+    flex-grow: 5
+}
+
+.container {
+  background-color: white;
+  padding: 1em;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 70em;
+}
+.block{
+    text-align: left;
+    padding: 0 2em;
+}
+
+.navigation{
+    padding: 0.5em 0;
+    height: 3em;
+    background-color: #333;
+    display: flex;
+}
+.navPadding{
+    flex-grow: 1;
+}
+.navBody{
+    flex-grow: 3;
+}
+
+.kotlin-logo{
+    position: relative;
+    top: 12px;
+    float: left;
+    width: 103px;
+    height: 22px;
+    font-size: 0;
+    text-decoration: none;
+}
