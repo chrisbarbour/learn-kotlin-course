@@ -21,4 +21,6 @@ jobs:
 
     - run: npm run build
 
-    - run: aws s3 ls
+    - run: npm install -g cfn-create-or-update
+
+    - run: cfn-create-or-update --stack-name kotlin-course-client --template-body file://deployment.yml
