@@ -1,5 +1,9 @@
 package app
 
+import app.content.basics.functions
+import app.content.basics.literals
+import app.content.overview.welcome
+import linkedContent
 import react.*
 import react.dom.*
 import logo.*
@@ -7,9 +11,17 @@ import ticker.*
 
 
 class App : RComponent<RProps, RState>() {
-    override fun componentDidMount() {
-        playground("code")
-    }
+
+    val contents = mapOf(
+            "Overview" to listOf(
+            "Welcome" to welcome
+        ),
+        "Basics" to listOf(
+            "Literals" to literals,
+            "Functions" to functions
+        )
+    )
+
     override fun RBuilder.render() {
         div("navigation"){
             div("navPadding"){}
@@ -21,26 +33,13 @@ class App : RComponent<RProps, RState>() {
             }
             div("navPadding"){}
         }
-        div("container") {
-            div("contents") {
-                sidebar(listOf(
-                        SidebarLink("Basics", listOf(
-                                SidebarLeaf("Literals"),
-                                SidebarLeaf("Types")
-                        ))
-                        ))
-                div("block") {
-                    h1 { +"Literals"}
-                    p { +"In Kotlin xyz...dklfsdkfjdsjf" }
-                    code{
-                        +("fun main(args: Array<String>){\n" +
-                                "//sampleStart val a = \"Hello\";\n" +
-                                "println(a);\n//sampleEnd\n" +
-                                "}")
-                    }
-                }
-            }
-        }
+        linkedContent(contents.map {
+            (name, links) ->
+            SidebarLink(name, links.map {
+                (linkName, component) ->
+                SidebarLeaf(linkName, component)
+            }, name == "Overview")
+        }, SidebarLeaf("Welcome"){})
     }
 }
 

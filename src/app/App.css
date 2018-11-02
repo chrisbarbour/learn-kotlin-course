@@ -16,27 +16,6 @@ body {
 .App-ticker {
   font-size: medium;
 }
-.contents{
-    display: flex;
-}
-.contents>div:nth-child(1){
-    flex-grow: 1
-}
-.contents>div:nth-child(2){
-    flex-grow: 5
-}
-
-.container {
-  background-color: white;
-  padding: 1em;
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 70em;
-}
-.block{
-    text-align: left;
-    padding: 0 2em;
-}
 
 .navigation{
     padding: 0.5em 0;

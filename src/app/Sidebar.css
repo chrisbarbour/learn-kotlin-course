@@ -8,6 +8,7 @@
     background-color: #f9f9f9;
 }
 .sidebar-link, .sidebar-leaf{
+    transition: all 1s;
     cursor: pointer;
     padding: 0.5em;
     color: #497bb7;
