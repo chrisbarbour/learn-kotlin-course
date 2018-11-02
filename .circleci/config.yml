@@ -23,4 +23,4 @@ jobs:
 
     - run: npm install -g cfn-create-or-update
 
-    - run: cfn-create-or-update --stack-name kotlin-course-client --template-body file://deployment.yml
+    - run: cfn-create-or-update --stack-name kotlin-course-client --template-body file://deployment.yml --region eu-west-1
