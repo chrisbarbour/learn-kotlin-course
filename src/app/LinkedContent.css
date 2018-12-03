@@ -2,7 +2,8 @@
     display: flex;
 }
 .contents>div:nth-child(1){
-    flex-grow: 1
+    flex-grow: 1;
+    min-width: 12em;
 }
 .contents>div:nth-child(2){
     flex-grow: 5
@@ -24,4 +25,7 @@
 }
 .hidden-not-displayed{
     display: none;
+}
+.kotlin-logo-large{
+    width: 20%;
 }

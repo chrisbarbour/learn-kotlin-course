@@ -29,6 +29,12 @@ body {
 .navBody{
     flex-grow: 3;
 }
+.navTitle{
+    color: white;
+    margin: 0;
+    font-weight: 100;
+    margin-top: 0.2em;
+    }
 
 .kotlin-logo{
     position: relative;
@@ -38,4 +44,8 @@ body {
     height: 22px;
     font-size: 0;
     text-decoration: none;
+}
+
+.centered {
+    text-align: center;
 }

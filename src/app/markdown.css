@@ -1,0 +1,45 @@
+
+.markdown-controls {
+  position: relative;
+  z-index: 5;
+  text-align: right;
+  color: #fff;
+  float: right;
+}
+
+.markdown-controls form {
+  background-color: rgba(39, 40, 34, 0.5);
+  margin-right: 20px;
+}
+
+.markdown-controls legend {
+  border-bottom: 0;
+  color: #fff;
+  font-size: 1.25em;
+  margin: 0;
+  padding: 10px 0 0 0;
+}
+
+
+blockquote {
+  color: #666;
+  margin: 0;
+  padding-left: 3em;
+  border-left: 0.5em #eee solid;
+}
+
+tr {
+  background: #fff;
+}
+
+th,
+td {
+  padding: 6px 13px;
+}
+table{
+ border-spacing: 0;
+}
+table tr:nth-child(2n) {
+
+  background: #f6f8fa;
+}

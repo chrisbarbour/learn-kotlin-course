@@ -5,7 +5,7 @@ import kotlin.browser.window
 
 
 class LinkedContent : RComponent<LinkedContent.Props, LinkedContent.State>() {
-    data class Props(var links: List<SidebarLink>, var default: SidebarLeaf): RProps
+    data class Props(var links: List<SidebarLink>, var default: String): RProps
     data class State(var selected: SidebarLeaf? = null, var mounted: Boolean?): RState
 
     override fun componentDidMount() {
@@ -15,6 +15,7 @@ class LinkedContent : RComponent<LinkedContent.Props, LinkedContent.State>() {
 
     private fun linkSelected(leaf: SidebarLeaf){
         setState{  selected = leaf }
+        window.history.pushState(leaf.location, leaf.name, leaf.location)
     }
 
     override fun RBuilder.render() {
@@ -24,7 +25,7 @@ class LinkedContent : RComponent<LinkedContent.Props, LinkedContent.State>() {
                 div {
                 props.links.flatMap { it.links }.forEach { link ->
                     val hidden = if(state.mounted == true)" hidden-not-displayed" else " hidden"
-                        div("block" + if (link.name != (state.selected ?: props.default).name) hidden else "") {
+                        div("block" + if (link.name != (state.selected?.name ?: props.default)) hidden else "") {
                             link.render(this)
                         }
                     }
@@ -34,4 +35,4 @@ class LinkedContent : RComponent<LinkedContent.Props, LinkedContent.State>() {
     }
 }
 
-fun RBuilder.linkedContent(links: List<SidebarLink>, default: SidebarLeaf) = child(LinkedContent::class) { attrs.links = links; attrs.default = default }
+fun RBuilder.linkedContent(links: List<SidebarLink>, default: String) = child(LinkedContent::class) { attrs.links = links; attrs.default = default }

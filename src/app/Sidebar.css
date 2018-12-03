@@ -33,6 +33,10 @@
 }
 
 .sidebar-text{
-    margin: 0;
+    margin: 0 1em;
     padding: 0;
+}
+
+.sidebar-text-selected{
+    color: #f88a09;
 }
