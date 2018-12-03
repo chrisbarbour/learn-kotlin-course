@@ -1,33 +1,37 @@
 package app
 
-import app.content.basics.getStarted
-import app.content.basics.functions
 import app.content.intro.introduction
-import app.content.overview.welcome
+import app.content.other.other
+import app.content.overview.classes
+import app.content.overview.functions
+import app.content.overview.ktFiles
+import app.content.overview.variables
 import linkedContent
 import react.*
 import react.dom.*
+import kotlin.browser.window
 
 
 class App : RComponent<RProps, RState>() {
 
     val contents = mapOf(
             "Introduction" to listOf(
-                    ("intro" to "Introduction") to introduction
-            ),"Introduction2" to listOf(
-            ("intro2" to "Introduction2") to introduction
-    ),"Introduction3" to listOf(
-            ("intro3" to "Introduction3") to introduction
-    ),"Introduction4" to listOf(
-            ("intro4" to "Introduction4") to introduction
-    ),"Introduction5" to listOf(
-            ("intro5" to "Introduction5") to introduction
-    ),
-        "Fundamentals" to listOf(
-                ("getStarted" to "Get Started") to getStarted,
-                ("functions" to "Functions") to functions
-        )
+                    ("/intro" to "Introduction") to introduction
+            ),
+            "Kotlin Language" to listOf(
+                    ("/ktFiles" to "Kotlin Files") to ktFiles,
+                    ("/variables" to "Variables") to variables,
+                    ("/classes" to "Classes") to classes,
+                    ("/functions" to "Functions") to functions
+            ),
+            "Other" to listOf(
+                    ("/other" to "Other") to other //TODO
+            )
     )
+
+    override fun componentDidMount() {
+        if(location() == "/") window.location.assign("/intro")
+    }
 
     override fun RBuilder.render() {
         div("navigation"){

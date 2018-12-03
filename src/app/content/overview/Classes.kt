@@ -1,0 +1,26 @@
+package app.content.overview
+
+import Markdown
+import react.RBuilder
+
+val classes: RBuilder.() -> Unit = {
+    Markdown {
+        attrs.source = """
+                # Classes and Types
+                ...
+                ## Classes
+                ...
+                ## Data Classes
+                ...
+                ## Kotlin Type Tree
+                ...
+                ## Generics
+                ...
+                ## Enum Classes
+                ...
+                ## Objects and Companions
+                ...
+                ## Yada Yada Yada...
+                """.trimIndent().trimMargin()
+    }
+}

@@ -6,7 +6,7 @@ import react.dom.*
 import kotlin.browser.window
 
 
-fun location() = with(if(window.location.href.endsWith("/")) window.location.href.substringBeforeLast("/") else window.location.href){ substringAfterLast("/")}
+fun location() = window.location.pathname
 
 class Sidebar : RComponent<Sidebar.Props, RState>() {
     data class Props(var links: List<SidebarLink>, var linkSelected: (SidebarLeaf) -> Unit): RProps

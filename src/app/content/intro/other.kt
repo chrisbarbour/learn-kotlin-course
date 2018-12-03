@@ -18,7 +18,19 @@ val introduction: RBuilder.() -> Unit = {
     }
     Markdown {
         attrs.source = """
+                # What you need to know for this course
+                ...
+                # Course Content
+                ...
+                ...
+                """.trimIndent().trimMargin()
+    }
+    Markdown {
+        attrs.source = """
                 # What is Kotlin?
+                ...
+                ## JVM, JS, Native
+                ...
                 """.trimIndent().trimMargin()
     }
     code {
@@ -31,4 +43,11 @@ val introduction: RBuilder.() -> Unit = {
             }
         """.trimIndent()
     }
+    Markdown {
+        attrs.source = """
+                # Procedural vs Object Oriented vs Functional
+                ...
+                """.trimIndent().trimMargin()
+    }
+
 }
