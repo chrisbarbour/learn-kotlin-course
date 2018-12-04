@@ -1,7 +1,12 @@
 package app
 
+import app.content.intro.arrow
+import app.content.intro.coroutines
 import app.content.intro.introduction
-import app.content.other.other
+import app.content.intro.typesafeBuilders
+import app.content.libraries.exposed
+import app.content.libraries.http4k
+import app.content.libraries.spring
 import app.content.overview.classes
 import app.content.overview.functions
 import app.content.overview.ktFiles
@@ -10,7 +15,6 @@ import linkedContent
 import react.*
 import react.dom.*
 import kotlin.browser.window
-
 
 class App : RComponent<RProps, RState>() {
 
@@ -21,11 +25,18 @@ class App : RComponent<RProps, RState>() {
             "Kotlin Language" to listOf(
                     ("/ktFiles" to "Kotlin Files") to ktFiles,
                     ("/variables" to "Variables") to variables,
-                    ("/classes" to "Classes") to classes,
+                    ("/types" to "Types") to classes,
                     ("/functions" to "Functions") to functions
             ),
-            "Other" to listOf(
-                    ("/other" to "Other") to other //TODO
+            "Libraries" to listOf(
+                    ("/spring" to "Spring") to spring,
+                    ("/http4k" to "Http4k") to http4k,
+                    ("/exposed" to "Exposed") to exposed
+            ),
+            "Advanced" to listOf(
+                    ("/coroutines" to "Coroutines") to coroutines,
+                    ("/typesafeBuilders" to "Typesafe Builders") to typesafeBuilders,
+                    ("/arrow" to "Arrow") to arrow
             )
     )
 
