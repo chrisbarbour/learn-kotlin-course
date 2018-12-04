@@ -27,6 +27,7 @@ class LinkedContent : RComponent<LinkedContent.Props, LinkedContent.State>() {
                     val hidden = if(state.mounted == true)" hidden-not-displayed" else " hidden"
                         div("block" + if (link.name != (state.selected?.name ?: props.default)) hidden else "") {
                             link.render(this)
+                            divider()
                         }
                     }
                 }

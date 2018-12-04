@@ -1,16 +1,14 @@
 package app
 
-import app.content.intro.arrow
-import app.content.intro.coroutines
+import app.content.advanced.arrow
+import app.content.advanced.coroutines
+import app.content.advanced.delegatedProperties
+import app.content.advanced.typesafeBuilders
 import app.content.intro.introduction
-import app.content.intro.typesafeBuilders
 import app.content.libraries.exposed
 import app.content.libraries.http4k
 import app.content.libraries.spring
-import app.content.overview.classes
-import app.content.overview.functions
-import app.content.overview.ktFiles
-import app.content.overview.variables
+import app.content.overview.*
 import linkedContent
 import react.*
 import react.dom.*
@@ -25,7 +23,8 @@ class App : RComponent<RProps, RState>() {
             "Kotlin Language" to listOf(
                     ("/ktFiles" to "Kotlin Files") to ktFiles,
                     ("/variables" to "Variables") to variables,
-                    ("/types" to "Types") to classes,
+                    ("/idioms" to "Idioms") to general,
+                    ("/types" to "Types") to types,
                     ("/functions" to "Functions") to functions
             ),
             "Libraries" to listOf(
@@ -36,6 +35,7 @@ class App : RComponent<RProps, RState>() {
             "Advanced" to listOf(
                     ("/coroutines" to "Coroutines") to coroutines,
                     ("/typesafeBuilders" to "Typesafe Builders") to typesafeBuilders,
+                    ("/delegatedProperties" to "Delegated Properties") to delegatedProperties,
                     ("/arrow" to "Arrow") to arrow
             )
     )

@@ -1,4 +1,4 @@
-package app.content.intro
+package app.content.advanced
 
 import Markdown
 import react.RBuilder

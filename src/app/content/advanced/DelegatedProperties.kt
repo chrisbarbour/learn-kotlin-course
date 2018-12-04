@@ -6,9 +6,9 @@ import react.dom.code
 import react.dom.div
 import react.dom.img
 
-val arrow: RBuilder.() -> Unit = {
+val delegatedProperties: RBuilder.() -> Unit = {
     Markdown { attrs.source = """
-        # Introduction to Arrow
+        # Delegated Properties
         ```
     """.trimIndent().trimMargin() }
 }

@@ -28,7 +28,8 @@ val introduction: RBuilder.() -> Unit = {
     Markdown {
         attrs.source = """
                 # What is Kotlin?
-                ...
+                Kotlin is a programming language built by JetBrains supported by the Kotlin Foundation in collaboration with Google.
+
                 ## JVM, JS, Native
                 ...
                 """.trimIndent().trimMargin()
