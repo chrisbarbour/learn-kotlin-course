@@ -9,6 +9,7 @@ import kotlinx.html.CODE
 import markdown
 import react.RBuilder
 import react.dom.RDOMBuilder
+import react.dom.div
 import react.dom.textArea
 
 private val stringInterpolation: RBuilder.() -> Unit = {
@@ -157,7 +158,7 @@ private val nulls: RBuilder.() -> Unit = {
         |    println(myCar.color) // Compiler accepts this
         }
         else {
-        |    println(myCar.color) // Compilre rejects this
+        |    println(myCar.color) // Compiler rejects this
         }
         """.trimIndent().trimMargin()){ hiddenCar() }
 
@@ -209,7 +210,7 @@ private val destructuring: RBuilder.() -> Unit = {
                     "Nissan" to "Micra"
                 )
 
-                val cars = carInfo.map { (make, model) -> Car(make, model) } // Destructures Each Pair into make and model
+                val cars = carInfo.map { (make, model) -> Car(make, model) } // Destructures each Pair into make and model
 
                 println(cars)
             """
@@ -227,11 +228,14 @@ private val pairs: RBuilder.() -> Unit = {
 
                 A **Pair** stores two (first and second).
 
-                Pairs can be created either by constructing them as normal classes or by using the **to** keyword.
+                Pairs can be created either by constructing them as normal types or by using the **to** keyword.
             """,
             code = """
-                val myPair = "key" to "value"
-                println(myPair)
+                val aPair = Pair("key", "value")
+                val aTriple = Triple("first", "second", "third")
+                val anotherPair = "key" to "value"
+
+                println(anotherPair)
             """
     )
     annotatedCode(
@@ -243,9 +247,15 @@ private val pairs: RBuilder.() -> Unit = {
                 val pairs: List<Pair<String, Int>> = myMap.toList()
                 val backToMap: Map<String, Int> = pairs.toMap()
 
-                println(pairs)
-                println(backToMap)
+                println("List of Pairs: ${'$'}pairs")
+                println("Map: ${'$'}backToMap")
             """
+    )
+}
+
+val varargs: RBuilder.() -> Unit = {
+    annotatedCode(
+            "# Varargs","TODO()"
     )
 }
 
@@ -258,6 +268,8 @@ val general: RBuilder.() -> Unit = {
     ranges()
     divider()
     nulls()
+    divider()
+    varargs()
     divider()
     pairs()
     divider()

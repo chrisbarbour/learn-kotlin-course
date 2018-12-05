@@ -1,13 +1,45 @@
 package app.content.overview
 
 import Markdown
+import app.annotatedCode
 import react.RBuilder
 
 val functions: RBuilder.() -> Unit = {
+    annotatedCode(
+            annotation = """
+                # Functions
+                Functions in Kotlin are first class citizens and can be declared anywhere, including outside of any classes.
+
+                They can be declared using the **fun** keyword as follows:
+            """,
+            code = """
+                fun log(log: String) = println(log)
+                log("Hello, World!")
+            """
+    )
+    annotatedCode(
+            annotation = """
+                Functions can have implicit return types when using the = form.
+
+                The following are equivalent
+            """,
+            code = """
+                fun doSomething() = "Foo Bar"
+                fun doSomething2(): String = "Foo Bar"
+                fun doSomething3(): String { return "Foo Bar" }
+            """, readOnly = true
+    )
+    annotatedCode(
+            annotation = """
+                Calling functions looks like this:
+            """,
+            code = """
+                fun text() = "Foo Bar"
+                println(text())
+            """
+    )
     Markdown {
         attrs.source = """
-                # Functions
-                ...
                 ## Lambdas
                 ...
                 ## Function Parameters

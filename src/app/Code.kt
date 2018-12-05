@@ -26,11 +26,12 @@ fun RBuilder.runnableCode(code: String, inMain: Boolean = true, builder: RDOMBui
     }
 }
 
-fun RBuilder.annotatedCode(annotation: String, code: String, trim: Boolean = true){
+fun RBuilder.annotatedCode(annotation: String, code: String, trim: Boolean = true, readOnly: Boolean = false){
     Markdown {
         attrs.source = if(trim) annotation.trimIndent().trimMargin() else annotation
     }
-    runnableCode(if(trim) code.trimIndent().trimMargin() else code)
+    if(readOnly) readOnlyCode(if(trim) code.trimIndent().trimMargin() else code)
+    else runnableCode(if(trim) code.trimIndent().trimMargin() else code)
 }
 
 fun RBuilder.divider() {
