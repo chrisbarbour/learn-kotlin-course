@@ -138,7 +138,7 @@ private val nulls: RBuilder.() -> Unit = {
     readOnlyCode(myCar)
     markdown("The compiler will not allow access the cars color property directly")
     runnableCode("println(myCar.color)"){ hiddenCar() }
-    markdown("To get access to the cars color property there are a few options")
+    markdown("To get access to the cars color property there are a few options\n## Null Access")
     markdown("### 1. Safe Access (?)")
     markdown("By adding a question mark you can safely access the property. The result will be null if the accessed object is null")
     runnableCode("println(myCar?.color)"){ hiddenCar() }
@@ -148,11 +148,9 @@ private val nulls: RBuilder.() -> Unit = {
     markdown("If the result is null then a **KotlinNullPointerException** will be thrown")
     runnableCode("val myOtherCar: Car? = null\nprintln(myOtherCar!!.color) // This will throw a runtime KotlinNullPointerException"){ hiddenCar() }
     markdown("### 3. Compiler Hints")
-    markdown("""
-        Under some situations the compiler can guarantee safe use of null and will back off.
-
+    markdown("""Under some situations the compiler can guarantee safe use of null and will back off.
         The simplest example of this is the if expression. Inside an if block that checks for not null case the compiler is happy.
-    """.trimMargin())
+    """.trimIndent())
     runnableCode("""
         if(myCar != null){
         |    println(myCar.color) // Compiler accepts this
@@ -167,14 +165,58 @@ private val destructuring: RBuilder.() -> Unit = {
     annotatedCode(
             annotation = """
                 # Destructuring
+                All types in Kotlin have functions that can be called to get components aside from their setters.
+
+                This applies to classes and also arrays.
+
+                They are name **component1()** **component2()** .. **componentN()**
             """,
             code = """
-                TODO()
+                data class Foo(val a: String = "a",val  b: Int = 5)
+                val foo = Foo()
+                println("${'$'}{foo.component2()} == ${'$'}{foo.b}")
+            """
+    )
+    annotatedCode(
+            annotation = """
+                Because these generically named methods exist, basic destructuring is possible.
+
+                This allows you to take parts of classes or arrays and store them into variables as shown below.
+            """,
+            code = """
+                data class Car(val make: String,val model: String, val bodyTypes: List<String>)
+                val nissan350z = Car("Nissan", "350z", listOf("Coupe", "Roadster"))
+
+                val (make, model, bodyTypes) = nissan350z // Destructuring an Object
+                val (typeA, typeB) = bodyTypes // Destructuring a List
+
+                println("Make: ${'$'}make")
+                println("Model: ${'$'}model")
+                println("Body Type A: ${'$'}typeA")
+                println("Body Type B: ${'$'}typeB")
+            """
+    )
+    annotatedCode(
+            annotation = """
+                This is very nice when using iterable functions like the map function.
+            """,
+            code = """
+                data class Car(val make: String,val model: String)
+
+                val carInfo = listOf(
+                    "Nissan" to "350z",
+                    "Nissan" to "Micra"
+                )
+
+                val cars = carInfo.map { (make, model) -> Car(make, model) } // Destructures Each Pair into make and model
+
+                println(cars)
             """
     )
 }
 
 val general: RBuilder.() -> Unit = {
+
     markdown("# General Idioms")
     stringInterpolation()
     runtimeInstanceChecking()
