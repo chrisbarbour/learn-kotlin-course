@@ -4,12 +4,15 @@ import Markdown
 import app.annotatedCode
 import app.readOnlyCode
 import app.runnableCode
+import kotlinx.html.CODE
+import markdown
 import react.RBuilder
+import react.dom.RDOMBuilder
+import react.dom.textArea
 
-val general: RBuilder.() -> Unit = {
+private val stringInterpolation: RBuilder.() -> Unit = {
     annotatedCode(
             annotation = """
-                # General Idioms
                 ## String Interpolation
                 Strings can be built from various components by using the $ symbol inside quotes " "
             """,
@@ -20,6 +23,9 @@ val general: RBuilder.() -> Unit = {
                 println("You can also use \${'$'}{...} to execute code inline like this: ${'$'}{ hello + world }")
             """
     )
+}
+
+private val runtimeInstanceChecking: RBuilder.() -> Unit = {
     annotatedCode(
             annotation = """
                 ## Runtime Instance Checking
@@ -40,6 +46,8 @@ val general: RBuilder.() -> Unit = {
                 println(abc is Int)
             """
     )
+}
+private val ranges: RBuilder.() -> Unit = {
     annotatedCode(
             annotation = """
                 ## Ranges
@@ -87,7 +95,90 @@ val general: RBuilder.() -> Unit = {
                 println(sameRange.toList())
             """
     )
-    Markdown {
-        attrs.source = "> Ranges are also iterable. This means you can iterate over them with all the standard iterable functions listed in [Collections](/collections)"
-    }
+    markdown("> Ranges are also iterable. This means you can iterate over them with all the standard iterable functions listed in [Collections](/collections)")
+    annotatedCode(
+            annotation = """
+                Ranges also have a step property allowing you to skip values.
+
+                > Step can only be a positive number.
+            """,
+            code = """
+                val range = 4.until(10).step(3)
+                val sameRange = 4 until 10 step 3 // Step is also infix
+                println(range.toList())
+                println(sameRange.toList())
+            """
+    )
+}
+private val nulls: RBuilder.() -> Unit = {
+    annotatedCode(
+            annotation = """
+                # Null !! ?
+                Kotlin has taken care of the null problem that arises in java where anything can be set to null.
+
+                In Kotlin you must explicitly say that a type can be null if you want it to be possible.
+                At runtime null pointer exceptions are still a possibility but you are now protected by the type system at compile time.
+            """,
+            code = """
+                var foo = "a string" // this is implied to be a kotlin.String which can not be null
+                foo = null // will not compile
+            """
+    )
+    markdown("""
+                ## Make something nullable (?)
+                To make a type nullable add a ? to it. The compiler will make sure you do something about it.
+
+                If you have this class defined
+            """.trimIndent())
+    val carClass = "data class Car(val color: String)"
+    val myCar = "val myCar: Car? = Car(\"red\")"
+    val hiddenCar: RDOMBuilder<CODE>.()->Unit = { textArea(classes = "hidden-dependency") { +"$carClass;$myCar" } }
+    readOnlyCode(carClass)
+    markdown("You can define a variable with a type of Car? meaning a nullable Car, like this")
+    readOnlyCode(myCar)
+    markdown("The compiler will not allow access the cars color property directly")
+    runnableCode("println(myCar.color)"){ hiddenCar() }
+    markdown("To get access to the cars color property there are a few options")
+    markdown("### 1. Safe Access (?)")
+    markdown("By adding a question mark you can safely access the property. The result will be null if the accessed object is null")
+    runnableCode("println(myCar?.color)"){ hiddenCar() }
+    markdown("### 2. Asserting Not Null (!!)")
+    markdown("By adding a !! you can tell the compiler to stop worrying about it.")
+    runnableCode("println(myCar!!.color)"){ hiddenCar() }
+    markdown("If the result is null then a **KotlinNullPointerException** will be thrown")
+    runnableCode("val myOtherCar: Car? = null\nprintln(myOtherCar!!.color) // This will throw a runtime KotlinNullPointerException"){ hiddenCar() }
+    markdown("### 3. Compiler Hints")
+    markdown("""
+        Under some situations the compiler can guarantee safe use of null and will back off.
+
+        The simplest example of this is the if expression. Inside an if block that checks for not null case the compiler is happy.
+    """.trimMargin())
+    runnableCode("""
+        if(myCar != null){
+        |    println(myCar.color) // Compiler accepts this
+        }
+        else {
+        |    println(myCar.color) // Compilre rejects this
+        }
+        """.trimIndent().trimMargin()){ hiddenCar() }
+
+}
+private val destructuring: RBuilder.() -> Unit = {
+    annotatedCode(
+            annotation = """
+                # Destructuring
+            """,
+            code = """
+                TODO()
+            """
+    )
+}
+
+val general: RBuilder.() -> Unit = {
+    markdown("# General Idioms")
+    stringInterpolation()
+    runtimeInstanceChecking()
+    ranges()
+    nulls()
+    destructuring()
 }
