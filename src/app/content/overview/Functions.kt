@@ -91,6 +91,9 @@ val parameters: RBuilder.() -> Unit = {
                 > A vararg parameter does not have to be the last parameter
                 >
                 > However you may only use a single one in any function
+
+                Vararg parameters appear as Array<T> where T is the type of the parameter (Int in the example below)
+                > When the type is a primitive type then a special Array of that type will be used. In this example its an IntArray
             """,
             code = """
                 fun abc(a: String, vararg b: Int){
@@ -98,6 +101,23 @@ val parameters: RBuilder.() -> Unit = {
                 |    b.forEach { print(it) }
                 }
                 abc("ABC", 1, 2, 3)
+            """
+    )
+    annotatedCode(
+            annotation = """
+                ### The Spread Operator
+
+                When a function requires a vararg parameter you can also supply an array of the correct type.
+
+                To make it comply to the vararg parameter you need the spread operator *
+            """,
+            code = """
+                fun abc(a: String, vararg b: Int){
+                |    print(a)
+                |    b.forEach { print(it) }
+                }
+                val integerValues = arrayOf(1,2,3).toTypedArray() // Coverts to IntArray
+                abc("ABC", *integerValues) // Spreads into varargs parameter
             """
     )
 }
