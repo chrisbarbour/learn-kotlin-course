@@ -54,7 +54,7 @@ class App : RComponent<RProps, RState>() {
                     attrs.type = "image/svg+xml"
                 }
                 div{
-                    h1("navTitle") { +"Chris' Kotlin Course" }
+                    h1("navTitle") { +"Kotlin Course" }
                 }
             }
             div("navPadding"){}

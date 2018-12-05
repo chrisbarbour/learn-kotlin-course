@@ -161,7 +161,13 @@ private val nulls: RBuilder.() -> Unit = {
         |    println(myCar.color) // Compiler rejects this
         }
         """.trimIndent().trimMargin()){ hiddenCar() }
-
+    markdown("## Elvis Operator")
+    markdown("You can also chose to use a nullable value if not null otherwise select a default value using the elvis operator")
+    runnableCode("""
+        val car: Car? = null
+        val color = car?.color ?: "red" // car is null so result of car?.color is also null
+        println(color)
+    """.trimMargin()){ hiddenCar() }
 }
 private val destructuring: RBuilder.() -> Unit = {
     annotatedCode(
@@ -253,12 +259,6 @@ private val pairs: RBuilder.() -> Unit = {
     )
 }
 
-val varargs: RBuilder.() -> Unit = {
-    annotatedCode(
-            "# Varargs","TODO()"
-    )
-}
-
 val general: RBuilder.() -> Unit = {
     markdown("# General Idioms")
     stringInterpolation()
@@ -268,8 +268,6 @@ val general: RBuilder.() -> Unit = {
     ranges()
     divider()
     nulls()
-    divider()
-    varargs()
     divider()
     pairs()
     divider()
