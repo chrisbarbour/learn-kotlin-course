@@ -2,6 +2,7 @@ package app.content.overview
 
 import Markdown
 import app.annotatedCode
+import app.divider
 import app.readOnlyCode
 import app.runnableCode
 import kotlinx.html.CODE
@@ -215,12 +216,50 @@ private val destructuring: RBuilder.() -> Unit = {
     )
 }
 
-val general: RBuilder.() -> Unit = {
+private val pairs: RBuilder.() -> Unit = {
+    annotatedCode(
+            annotation = """
+                # Pair and Triple (Tuples)
 
+                Kotlin does not have the notion of a tuple (although it used to). However it does have pairs and triples which allow 2 and 3 values to be stored without creating intermediary classes.
+
+                A **Triple** simply stores 3 values (first, second and third).
+
+                A **Pair** stores two (first and second).
+
+                Pairs can be created either by constructing them as normal classes or by using the **to** keyword.
+            """,
+            code = """
+                val myPair = "key" to "value"
+                println(myPair)
+            """
+    )
+    annotatedCode(
+            annotation = """
+                Pairs can be extracted from keys and values in a Map and Maps can be constructed from lists of pairs.
+            """,
+            code = """
+                val myMap: Map<String, Int> = mapOf("a" to 1, "b" to 2) // mapOf wants Pairs
+                val pairs: List<Pair<String, Int>> = myMap.toList()
+                val backToMap: Map<String, Int> = pairs.toMap()
+
+                println(pairs)
+                println(backToMap)
+            """
+    )
+}
+
+val general: RBuilder.() -> Unit = {
     markdown("# General Idioms")
     stringInterpolation()
+    divider()
     runtimeInstanceChecking()
+    divider()
     ranges()
+    divider()
     nulls()
+    divider()
+    pairs()
+    divider()
     destructuring()
 }
