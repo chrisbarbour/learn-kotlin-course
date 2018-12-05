@@ -21,6 +21,8 @@ val ktFiles: RBuilder.() -> Unit = {
                 ## Structure
                 Top level declarations include:
 
+                > Note that none are required
+
                 * package
                 * import
                 * class
@@ -30,8 +32,6 @@ val ktFiles: RBuilder.() -> Unit = {
                 * var
                 * typealias
                 * fun
-
-                Note that none are required
 
                 The ordering is as follows:
 
@@ -87,10 +87,4 @@ val ktFiles: RBuilder.() -> Unit = {
         val foo = Bar() // Class in package a.b.c
     """.trimIndent()
     )
-
-
-//    ## Imports
-//    ..
-//    ## 1st Class Citizens
-//    ... (classes, functions, variables) [ high level ]
 }

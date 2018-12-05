@@ -40,3 +40,6 @@
 .sidebar-text-selected{
     color: #f88a09;
 }
+.sidebar-leaf>.sidebar-text {
+    margin-left: 2em;
+}

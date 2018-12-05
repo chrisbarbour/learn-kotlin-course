@@ -15,6 +15,15 @@ fun RBuilder.readOnlyCode(code: String, builder: RDOMBuilder<CODE>.() -> Unit = 
         builder()
     }
 }
+fun RBuilder.runnableCode(code: String, inMain: Boolean = true, builder: RDOMBuilder<CODE>.() -> Unit = {}){
+    code {
+        attrs["lines"] = "true"
+        attrs["highlight-on-fly"] = "true"
+        if(inMain) +"fun main(){\n//sampleStart\n$code //sampleEnd\n}"
+        else +code
+        builder()
+    }
+}
 
 fun RBuilder.divider() {
     div("section-divider-wrapper") {

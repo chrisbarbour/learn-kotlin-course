@@ -25,7 +25,8 @@ class App : RComponent<RProps, RState>() {
                     ("/variables" to "Variables") to variables,
                     ("/idioms" to "Idioms") to general,
                     ("/types" to "Types") to types,
-                    ("/functions" to "Functions") to functions
+                    ("/functions" to "Functions") to functions,
+                    ("/collections" to "Collections") to collections
             ),
             "Libraries" to listOf(
                     ("/spring" to "Spring") to spring,

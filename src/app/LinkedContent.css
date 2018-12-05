@@ -2,11 +2,10 @@
     display: flex;
 }
 .contents>div:nth-child(1){
-    flex-grow: 1;
-    min-width: 12em;
+    flex: 3;
 }
 .contents>div:nth-child(2){
-    flex-grow: 5
+    flex: 10
 }
 
 .container {
