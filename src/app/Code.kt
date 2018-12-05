@@ -1,5 +1,6 @@
 package app
 
+import Markdown
 import kotlinx.html.CODE
 import react.RBuilder
 import react.dom.RDOMBuilder
@@ -23,6 +24,13 @@ fun RBuilder.runnableCode(code: String, inMain: Boolean = true, builder: RDOMBui
         else +code
         builder()
     }
+}
+
+fun RBuilder.annotatedCode(annotation: String, code: String, trim: Boolean = true){
+    Markdown {
+        attrs.source = if(trim) annotation.trimIndent().trimMargin() else annotation
+    }
+    runnableCode(if(trim) code.trimIndent().trimMargin() else code)
 }
 
 fun RBuilder.divider() {
