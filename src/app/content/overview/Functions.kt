@@ -2,8 +2,13 @@ package app.content.overview
 
 import app.annotatedCode
 import app.divider
+import app.readOnlyCode
+import app.runnableCode
 import markdown
 import react.RBuilder
+import kotlin.js.Math
+import kotlin.js.Math.random
+
 
 val parameters: RBuilder.() -> Unit = {
     markdown("# Function Parameters")
@@ -122,6 +127,204 @@ val parameters: RBuilder.() -> Unit = {
     )
 }
 
+val returnTypes: RBuilder.() -> Unit = {
+    markdown("## Return Types")
+    annotatedCode(
+            annotation = "The return type of a function is declared at the end of the parameter brackets following a colon **:**",
+            code = "fun myFunction(): String  { ... } // <- This is the return type (String)", readOnly = true
+    )
+    annotatedCode(
+            annotation = "If the return type is not provided the function will return Unit (See [Types](/types))",
+            code = "fun myFunction()  { ... } // <- This function's return type is Unit", readOnly = true
+    )
+    markdown("> You do not have to specify that a function throws exceptions")
+    markdown("Exceptions can be thrown from any function because throw statements result in the Nothing type (See [Types](/types))")
+}
+
+val memberFunctions: RBuilder.() -> Unit = {
+    markdown("## Member Functions")
+    annotatedCode(
+            annotation = "A function is called a member function when it is a member of a class",
+            code = """
+                data class Car(val color: String){
+                |   fun honkHorn() = println("Honk")
+                }
+            """, readOnly = true
+    )
+    markdown("### Overriding Functions")
+    annotatedCode(
+            annotation = """
+                All functions are final by default.
+
+                A function can be overwritten using the **override** keyword.
+
+                To make a function overwrittable use the **open** keyword.
+
+                This is only possible if the super types function is either abstract or open
+            """,
+            code = """open class Car(val color: String){
+                |   open fun drive() = print("Driving")
+                }
+                class FastCar: Car("red"){
+                   |override fun drive(){
+                   |     super.drive()  // Use super to access super type
+                   |     print(" Fast")
+                   |}
+                }
+                Car("blue").drive()
+                println()
+                FastCar().drive()
+            """
+    )
+}
+
+val overloadingFunctions: RBuilder.() -> Unit = {
+    markdown("## Overloading Functions")
+}
+
+
+val stdFunctions: RBuilder.() -> Unit = {
+    markdown("## let, apply, also, run, with")
+    markdown("""
+                Kotlin comes with a standard library that includes lots of very useful functions.
+
+                Here are a few definitions for functions that let you interact with state in a functional way.
+
+                Each do the same thing but have different return types, receivers and parameters.
+
+                They pass access to some state so you can modify safely or do some side effect.
+            """.trimIndent())
+    markdown("### let")
+    markdown("> passes variable, returns what you return")
+    readOnlyCode("inline fun <T, R> T.let(block: (T) -> R): R")
+    runnableCode("""
+                val fooBar = "Foo".let { "${'$'}it Bar" }
+                println(fooBar)
+            """.trimIndent()
+    )
+
+    markdown("### apply")
+    markdown("> passes variable as receiver, returns same variable")
+    readOnlyCode("inline fun <T> T.apply(block: T.() -> Unit): T")
+    runnableCode("""
+                class Car(val color: String, var topSpeed: Int = 0)
+                val myCar = Car("red").apply { topSpeed = 200 } // Used to modify (useful for java types)
+                println(myCar)
+            """.trimIndent()
+    )
+
+    markdown("### also")
+    markdown("> passes variable, returns same variable")
+    readOnlyCode("fun <T> T.also(block: (T) -> Unit): T")
+    runnableCode("""
+                class Car(val color: String, var topSpeed: Int = 0)
+                val myCar = Car("red").also { it.topSpeed = 200 } // Used to modify (useful for java types)
+                println(myCar)
+            """.trimIndent()
+    )
+
+    markdown("### run")
+    markdown("> passes variable as receiver, returns what you return.")
+    readOnlyCode("inline fun <T, R> T.run(block: T.() -> R): R")
+    runnableCode("""
+                data class Car(val color: String, var topSpeed: Int = 100){
+                    fun paintCar(color: String) = Car(color, topSpeed)
+                }
+                val paintedCar = Car("red").run { paintCar("blue") } // Used to run something
+                println(paintedCar)
+            """.trimIndent()
+    )
+
+    markdown("### with")
+    markdown("> passes variable as receiver, returns what you return.")
+    markdown("This is the same as run but is a global method rather than an extension method on type T")
+    readOnlyCode("fun <T, R> with(receiver: T, block: T.() -> R): R")
+    runnableCode("""
+                 data class Car(val color: String, var topSpeed: Int = 100){
+                    fun paintCar(color: String) = Car(color, topSpeed)
+                }
+                val paintedCar = with(Car("red")) { paintCar("blue") }
+                println(paintedCar)
+            """.trimIndent()
+    )
+}
+
+val extensionFunctions: RBuilder.() -> Unit = {
+    markdown("## Extension Functions")
+    annotatedCode(
+            annotation = """
+                Kotlin has a concept called extension functions that lets you externally extend the functionality of a type by adding a function to it.
+            """,
+            code = """
+                // Here, we are adding a function called randomizeCase to String
+                fun String.randomizeCase() = map { if(Math.random() > 0.5) it.toUpperCase() else it.toLowerCase() }.joinToString("")
+                println("Hello, World!".randomizeCase())
+                println("Hello, World!".randomizeCase())
+                println("Hello, World!".randomizeCase())
+
+                // You can also do this using Generics
+                fun <T> T.print() = println(this) // This applies to all types
+                "Foo Bar".print()
+            """
+    )
+    markdown("> The type you are extending is known as the receiver of that function")
+}
+
+val receiverTypes: RBuilder.() -> Unit = {
+    markdown("## Receivers")
+    annotatedCode(
+            annotation = """
+                Functions in Kotlin have a concept called a receiver. This is assigned to the **this** keyword when in the scope of the function body.
+
+                Normally this presents itself when in the context of a function that is a member of a class
+            """,
+            code = """
+                data class Car(val color: String = "red"){
+                    fun drive(){
+                        println("${'$'}this is Driving") // The 'this' here is the Car instance (The Car is the receiver)
+                    }
+                }
+                Car().drive()
+            """
+    )
+    annotatedCode(
+            annotation = """
+                This is the same example as above but using an extension method
+
+                > fun Car.drive() declares Car explicitly as the receiver
+            """,
+            code = """
+                data class Car(val color: String = "red")
+                fun Car.drive(){
+                    println("${'$'}this is Driving") // The 'this' here is still the Car instance
+                }
+                Car().drive()
+            """
+    )
+    annotatedCode(
+            annotation = """
+                This gets interesting when you create an extension function inside a class.
+
+                Now you have two layers of receivers.
+            """,
+            code = """
+                data class Car(val color: String = "red")
+                data class Driver(val name: String = "Bob"){
+                    fun Car.drive(){
+                        println("${'$'}this is Driving") // The 'this' here is still the Car instance
+                        println("We now also have access to the instance of Driver")
+                        println(this@Driver)
+                    }
+                }
+
+                with(Driver()){ // <- This gives us a Driver in scope
+                    Car().drive() // We can now call drive on Car because we have both a Driver and a Car
+                }
+            """
+    )
+    markdown("> This layering of receivers can be used to specify that an instance must be in scope")
+}
+
 val functions: RBuilder.() -> Unit = {
     annotatedCode(
             annotation = """
@@ -159,18 +362,25 @@ val functions: RBuilder.() -> Unit = {
     divider()
     parameters()
     divider()
-    markdown("## Return Types")
-    markdown("## Member Functions")
+    returnTypes()
+    divider()
+    overloadingFunctions()
+    divider()
+    memberFunctions()
+    divider()
     markdown("## Generic Functions")
     markdown("## Function Scope")
     markdown("## Function Types")
-    markdown("## let, apply, run, also, with ...")
+    extensionFunctions()
+    divider()
+    receiverTypes()
+    divider()
+    stdFunctions()
+    divider()
     markdown("## Infix")
     markdown("## Operators")
     markdown("## Invoke Function")
-    markdown("## Extension Functions")
     markdown("## Tail Recursion")
-    markdown("## Receiver Types")
     markdown("## Inline")
     markdown("## this")
     markdown("## Higher Order Functions")
