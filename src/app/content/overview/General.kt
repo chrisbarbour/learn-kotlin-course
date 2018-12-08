@@ -1,6 +1,5 @@
 package app.content.overview
 
-import Markdown
 import app.annotatedCode
 import app.divider
 import app.readOnlyCode
@@ -9,7 +8,6 @@ import kotlinx.html.CODE
 import markdown
 import react.RBuilder
 import react.dom.RDOMBuilder
-import react.dom.div
 import react.dom.textArea
 
 private val stringInterpolation: RBuilder.() -> Unit = {

@@ -6,8 +6,8 @@ import app.readOnlyCode
 import app.runnableCode
 import markdown
 import react.RBuilder
-import kotlin.js.Math
-import kotlin.js.Math.random
+import react.dom.code
+import react.dom.textArea
 
 
 val parameters: RBuilder.() -> Unit = {
@@ -121,7 +121,7 @@ val parameters: RBuilder.() -> Unit = {
                 |    print(a)
                 |    b.forEach { print(it) }
                 }
-                val integerValues = arrayOf(1,2,3).toTypedArray() // Coverts to IntArray
+                val integerValues = listOf(1,2,3).toIntArray() // Coverts to IntArray
                 abc("ABC", *integerValues) // Spreads into varargs parameter
             """
     )
@@ -140,6 +140,7 @@ val returnTypes: RBuilder.() -> Unit = {
     markdown("> You do not have to specify that a function throws exceptions")
     markdown("Exceptions can be thrown from any function because throw statements result in the Nothing type (See [Types](/types))")
 }
+
 
 val memberFunctions: RBuilder.() -> Unit = {
     markdown("## Member Functions")
@@ -325,6 +326,170 @@ val receiverTypes: RBuilder.() -> Unit = {
     markdown("> This layering of receivers can be used to specify that an instance must be in scope")
 }
 
+val infix: RBuilder.() -> Unit = {
+    markdown("## Infix Functions")
+    annotatedCode(
+            annotation = """
+                The **infix** keyword applied to a function allow you to omit the . and () for readability (optionally).
+
+                This is how operators work.
+
+                > Infix functions must be a member function or and extension function
+
+                > Infix functions must have a single value parameter
+            """,
+            code = """
+                infix fun Int.dot(b: Int) = this * b
+
+                println(5 dot 4) // Now you don't need the . and brackets
+                println(5.dot(4)) // Still works
+            """
+    )
+}
+
+val genericFunctions: RBuilder.() -> Unit = {
+    markdown("## Generic Functions")
+    annotatedCode(
+            annotation = "A function can use generic parameters as follows",
+            code = "fun <A,B> myFunction(a: A): B  { ... } ", readOnly = true
+    )
+    annotatedCode(
+            annotation = "",
+            code = """
+                data class MyCollection<T>(val items: MutableList<T> = mutableListOf()){
+                    fun add(item: T) = items.add(item)
+                    fun get(index: Int): T = items.get(index)
+                }
+                val myStringCollection = MyCollection<String>()
+                val myIntCollection = MyCollection<Int>()
+                myStringCollection.add("One")
+                myIntCollection.add(1)
+                println(myStringCollection)
+                println(myIntCollection)
+            """
+    )
+}
+
+val functionScopes: RBuilder.() -> Unit = {
+    markdown("## Function Scope")
+}
+
+val functionTypes: RBuilder.() -> Unit = {
+    markdown("## Function Types")
+    annotatedCode(
+            annotation = """
+                In Kotlin functions are first class citizens. This means there is a defined type for any given function and its value can be stored in a variable.
+
+                You can access a reference to a function using the **::** operator
+            """,
+            code = """
+                fun myFunction(){}
+                val refToMyFunction = ::myFunction
+            """, readOnly = true
+    )
+    annotatedCode(
+            annotation = """
+                Another way of getting a reference to a function is to create it as a **lambda**
+
+                ### Lambda Functions
+
+                A Lambda function is just a function but it is defined without the fun keyword as follows.
+            """,
+            code = """
+                fun myFunction(){ }
+                val myLambda = { } // This is equivalent to the above line
+
+                // This is a function that takes two arguments, a and b and returns a string (a + b)
+                fun functionWithArgs(a: String, b: Int) = a + b
+                val lambdaWithArgs = { a: String, b: Int -> a + b } // This is equivalent to the above line
+            """, readOnly = true
+    )
+    annotatedCode(
+            annotation = """
+                Functions themselves also have types.
+            """,
+            code = """
+                val myLambda: () -> Unit = { } // The type of this lambda is () -> Unit
+
+                // Here the type is (String) -> Int
+                val myLambdaWithArgs: (String) -> Int = { a: String -> a.toInt() }
+            """, readOnly = true
+    )
+    annotatedCode(
+            annotation = """
+                This means they can be passed as arguments
+            """,
+            code = """
+                // This function expects a function as its first parameter (runThis)
+                fun higherOrderFunc(runThis: () -> String) = "A " + runThis()
+
+                // We can pass it a lambda expression, or a reference to a function, or an anonymous function
+                // Note: The braces have moved because its the last argument. See 'When the Last Parameter is a Function' above
+                println(higherOrderFunc { "B" })
+            """
+    )
+    annotatedCode(
+            annotation = """
+                What does the lambda version of that look like ??
+            """,
+            code = """
+               // Here is the original again
+               fun higherOrderFunc(runThis: () -> String) = "A " + runThis()
+
+               // In lambda form it looks like this
+               val higherOrderLambda = { runThis: () -> String -> "A " + runThis() }
+
+               // What is the Type of those functions ?
+
+               val higherOrderLambda2: (() -> String) -> String = { runThis: () -> String -> "A " + runThis() }
+
+               println(higherOrderFunc { "B" })
+               println(higherOrderLambda { "C" })
+               println(higherOrderLambda2 { "D" })
+            """
+    )
+    annotatedCode(
+            annotation = """
+                ### it
+                If a lambda expression only takes a single argument then you can simply use the **it** keyword without specifying the parameter.
+            """,
+            code = """
+                val logWithoutIt: (String) -> Unit = { message -> println(message) }
+                val log: (String) -> Unit = { println(it) } // This is equivalent to the above line
+            """, readOnly = true
+    )
+    annotatedCode(
+            annotation = """
+                ### _
+                When a lambda expression does not need a parameter it can replace its name with an underscore
+            """,
+            code = """
+                val log: (String, String) -> Unit = { message, _ -> println(message) }
+            """, readOnly = true
+    )
+}
+
+val currying: RBuilder.() -> Unit = {
+    markdown("## Currying")
+    annotatedCode("""
+                Currying is when a function with n number of arguments is deconstructed into n functions linearly combined.
+
+                Functions are easier to reason about when they take a single argument. Currying deconstructs any function to be exactly this.
+
+                Currying decomposes a function so that it can be partially applied later.
+            """,
+            code = """
+                // The following function
+                val a: (String, String) -> String = { a, b -> a + b }
+                // Currying this makes the following
+                val c: (String) -> (String) -> String = { a -> { b -> a + b } }
+
+                println(a("One", "Two"))
+                println(c("One")("Two"))
+            """
+    )
+}
+
 val functions: RBuilder.() -> Unit = {
     annotatedCode(
             annotation = """
@@ -368,20 +533,24 @@ val functions: RBuilder.() -> Unit = {
     divider()
     memberFunctions()
     divider()
-    markdown("## Generic Functions")
-    markdown("## Function Scope")
-    markdown("## Function Types")
+    genericFunctions()
+    divider()
+    functionScopes()
+    divider()
+    functionTypes()
+    divider()
+    currying()
+    divider()
     extensionFunctions()
     divider()
     receiverTypes()
     divider()
     stdFunctions()
     divider()
-    markdown("## Infix")
+    infix()
+    divider()
     markdown("## Operators")
     markdown("## Invoke Function")
     markdown("## Tail Recursion")
     markdown("## Inline")
-    markdown("## this")
-    markdown("## Higher Order Functions")
 }
