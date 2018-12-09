@@ -74,11 +74,11 @@ val ktFiles: RBuilder.() -> Unit = {
     Markdown {
         attrs.source = """
                 ## Imports
-                A package declaration goes at the very top allowing items in this file to be namespaced to that package.
+                Imports appear below package declarations if any exist.
 
-                They can only appear at most once, and are not required.
+                Imports must appear above all other top level declarations.
 
-                Packages are not required to match the directory structure as in java.
+                Kotlin does not have a separate keyword for static imports.
 
                 """.trimIndent().trimMargin()
     }

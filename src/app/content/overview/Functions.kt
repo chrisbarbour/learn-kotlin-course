@@ -7,7 +7,6 @@ import app.runnableCode
 import markdown
 import react.RBuilder
 import react.dom.code
-import react.dom.textArea
 
 
 val parameters: RBuilder.() -> Unit = {
@@ -178,11 +177,6 @@ val memberFunctions: RBuilder.() -> Unit = {
             """
     )
 }
-
-val overloadingFunctions: RBuilder.() -> Unit = {
-    markdown("## Overloading Functions")
-}
-
 
 val stdFunctions: RBuilder.() -> Unit = {
     markdown("## let, apply, also, run, with")
@@ -371,7 +365,39 @@ val genericFunctions: RBuilder.() -> Unit = {
 }
 
 val functionScopes: RBuilder.() -> Unit = {
-    markdown("## Function Scope")
+    markdown("""
+        ## Function Scope
+
+        There are three scopes that functions can exist in:
+
+        * Top Level
+        * Member
+        * Local
+
+        """.trimIndent()
+    )
+    code {
+        attrs["lines"] = "true"
+        attrs["highlight-on-fly"] = "true"
+        +"""
+            val topLevelVal = "TopLevel"
+
+            fun topLevelFunction() = println("I am a top level function and have access to ${'$'}topLevelVal")
+
+            data class SomeClass(val prop: String){
+                fun memberFunction() = println("I am a member function and have access to ${'$'}prop and ${'$'}topLevelVal")
+            }
+
+            fun main(){
+                val localVal = "LocalVal"
+                fun localFunction() = println("I am a local function of the main function (nested) and have access to ${'$'}localVal and ${'$'}topLevelVal")
+
+                topLevelFunction()
+                SomeClass("Hello").memberFunction()
+                localFunction()
+            }
+        """.trimIndent()
+    }
 }
 
 val functionTypes: RBuilder.() -> Unit = {
@@ -490,6 +516,183 @@ val currying: RBuilder.() -> Unit = {
     )
 }
 
+val operators: RBuilder.() -> Unit = {
+    markdown("# Operators")
+    annotatedCode(
+            annotation = "There are many operators in Kotlin. Here is the list and some simple definitions",
+            code = """
+                + - * / % // Mathematical
+                = // Assignment
+                += -= *= /= %= // Augmented Assignment
+                ++ -- // Increment and Decrement
+                && || ! // And Or and Not
+                and or not // Logical Bitwise Operations
+                == != // Equality
+                === !== // Referential Equality
+                < > <= >= // Comparison
+                [ ] // Get and Set
+                !! // Not Null Assertion
+                ?. // Safe Call
+                ?: // Elvis
+                :: // Member or Class Reference
+                .. // Range
+                : // Name and Type Separation
+                ? // Nullable
+                -> // Lambda Parameter and Body Separation
+                @ // Annotations, Loop References
+                ; // Expression Separation
+                $ // Variable Reference in a String template
+                _ // Ignored Parameter
+                invoke // Invoke Functions
+            """, readOnly = true
+    )
+    annotatedCode(
+            annotation = """
+                ### Operator Overloading
+                Some operators can be overloaded by using the full name of the operator and the operator keyword
+            """,
+            code = """
+                data class Vector(val x: Float,val y: Float){
+                    operator fun plus(other: Vector) = Vector(x + other.x, y + other.y)
+                }
+                println(Vector(5f,10f) + Vector(20f, 4f))
+            """
+    )
+}
+
+val inline: RBuilder.() -> Unit = {
+    markdown("# Inline")
+    annotatedCode(
+            annotation = """
+                In Kotlin, because every function created results in an object, passing functions into other functions can mean a lot of objects being created. Especially if called in loops.
+
+                There are three special keywords created to alleviate this. They are **inline**, **crossinline** and **noinline**.
+
+                ## inline
+
+            """,
+            code = """
+                //Here is a higher order function
+                fun higherOrder(otherFunction: () -> Unit){
+                    doSomethingA()
+                    otherFunction()
+                    doSomethingB()
+                }
+                // We call it passing in our print function
+                higherOrder { println("Hi") }
+
+                // This gets translated into something like this (java (sortof))
+                higherOrder(new Function() { // <- New function created here
+                    public void invoke() {
+                      System.out.println("Hi")
+                    }
+                });
+            """, readOnly = true
+    )
+    annotatedCode(
+            annotation = """
+                If we use the inline keyword the compiler puts some restrictions in so that the function can be inlined.
+
+                This makes it look more like the following when compiled
+            """,
+            code = """
+                //Here is a higher order function inlined
+                inline fun higherOrder(otherFunction: () -> Unit){
+                    doSomethingA()
+                    otherFunction()
+                    doSomethingB()
+                }
+
+
+                // We call it passing in our print function
+                higherOrder { println("Hi") }
+
+                // This will now get translated into this
+                doSomethingA()
+                System.out.println("Hi")
+                doSomethingB()
+            """, readOnly = true
+    )
+    annotatedCode(
+            annotation = """
+                An interesting side effect of inlining functions is that they allow non-local control flow.
+
+                This simply means you can return from a function that is inlined changing the control flow from within.
+            """,
+            code = """
+                //Here is a higher order function inlined
+                inline fun higherOrder(otherFunction: () -> Unit){
+                    doSomethingA()
+                    otherFunction()
+                    doSomethingB()
+                }
+
+
+                // We passing it our print again but then return
+                higherOrder { println("Hi"); return }
+
+                // This means doSomethingB will not get called and the function this was called in will return
+            """, readOnly = true
+    )
+    annotatedCode(
+            annotation = """
+                ## noinline
+
+                This keyword simply specifies that when more than one function is being passed to your higher order function that is inlined you can specify that some of them are not inlined.
+            """,
+            code = """
+                inline fun higherOrder(otherFunctionA: () -> Unit, noinline otherFunctionB: () -> Unit){
+                    doSomethingA()
+                    otherFunctionA()
+                    otherFunctionB() // This call will not get inlined
+                    doSomethingB()
+                }
+            """, readOnly = true
+    )
+    annotatedCode(
+            annotation = """
+                ## crossinline
+
+                The crossinline keyword specifies that a lambda must not allow non-local returns.
+
+                This is required when the inlined function is called within another function which is not inlined inside the higher order function.
+            """,
+            code = """
+                inline fun higherOrder(otherFunctionA: () -> Unit, crossinline otherFunctionB: () -> Unit){
+                    doSomethingA()
+                    otherFunctionA()
+                    normalFunction {
+                        otherFunctionB() // This call needs crossinline because normalFunction is not inline
+                    }
+                    doSomethingB()
+                }
+                higherOrder({}) {
+                    return // This is not allowed
+                }
+            """, readOnly = true
+    )
+}
+
+val tailRecursion: RBuilder.() -> Unit = {
+    markdown("# Tail Recursion")
+    annotatedCode(
+            annotation = """
+                Functions are tail recursive when the final expression results in a call back to the same function.
+
+                This allows the compiled code to build code that does not push state onto the stack before making the call.
+
+                This means that a stack overflow will not happen and calculation can occur indefinitely.
+            """,
+            code = """
+                tailrec fun factorial(n: Int, run: Int = 1): Long = when(n) {
+                    1 -> run.toLong()
+                    else -> factorial(n-1, run*n)
+                }
+                (0..10).forEach { println(factorial(it)) }
+            """
+    )
+}
+
 val functions: RBuilder.() -> Unit = {
     annotatedCode(
             annotation = """
@@ -529,8 +732,6 @@ val functions: RBuilder.() -> Unit = {
     divider()
     returnTypes()
     divider()
-    overloadingFunctions()
-    divider()
     memberFunctions()
     divider()
     genericFunctions()
@@ -549,8 +750,9 @@ val functions: RBuilder.() -> Unit = {
     divider()
     infix()
     divider()
-    markdown("## Operators")
-    markdown("## Invoke Function")
-    markdown("## Tail Recursion")
-    markdown("## Inline")
+    operators()
+    divider()
+    inline()
+    divider()
+    tailRecursion()
 }
