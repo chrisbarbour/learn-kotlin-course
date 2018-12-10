@@ -23,6 +23,11 @@ val parameters: RBuilder.() -> Unit = {
                 fun foo2(bar: String, baz: Int){}
             """, readOnly = true
     )
+    runnableCode("""
+        // Declare a function that adds two numbers together named add
+        TODO()
+        println(add(5,10))
+    """.trimIndent(), tryCode = true)
     annotatedCode(
             annotation = """
                 ## Default Values
@@ -107,6 +112,16 @@ val parameters: RBuilder.() -> Unit = {
                 abc("ABC", 1, 2, 3)
             """
     )
+
+    runnableCode("""
+        // Declare a function named add that takes any amount of integers using vararg and adds them all together
+        // Hint: arrays have a sum function
+        TODO()
+        println(add(5,10, 9, 2, 4))
+        println(add(5, 9, 2))
+        println(add(5,10, 9, 2, 4,4,5,6))
+        println(add(*(0..100).toList().toIntArray()))
+    """.trimIndent(), tryCode = true)
     annotatedCode(
             annotation = """
                 ### The Spread Operator
@@ -242,6 +257,23 @@ val stdFunctions: RBuilder.() -> Unit = {
                 println(paintedCar)
             """.trimIndent()
     )
+    runnableCode("""
+        data class Car(var color: String){
+            fun paintCar(color: String) = Car(color)
+            override fun toString() = "${'$'}{color.capitalize()} Car"
+        }
+        val myCar: Car? = Car("red") // Don't forget that myCar can be null here
+        val greenCar = TODO() // make a green car using LET
+        println(greenCar)
+        val blueCar = TODO() // APPLY a blue color to the car
+        println(blueCar)
+        val yellowCar = TODO() // make the car ALSO yellow
+        println(yellowCar)
+        val pinkCar = TODO() // make a pink car using RUN
+        println(pinkCar)
+        val blackCar = TODO() // make a black car with WITH
+        println(blackCar)
+    """.trimIndent(), tryCode = true)
 }
 
 val extensionFunctions: RBuilder.() -> Unit = {
@@ -258,10 +290,16 @@ val extensionFunctions: RBuilder.() -> Unit = {
                 println("Hello, World!".randomizeCase())
 
                 // You can also do this using Generics
-                fun <T> T.print() = println(this) // This applies to all types
+                fun <T> T.print() = println(this) // This print function applies to all types
                 "Foo Bar".print()
             """
     )
+    runnableCode("""
+        // Extend the Int type to subtract 5
+        TODO()
+        println(10.subtract5())
+        println(8.subtract5())
+    """.trimIndent(), tryCode = true)
     markdown("> The type you are extending is known as the receiver of that function")
 }
 
@@ -512,6 +550,8 @@ val currying: RBuilder.() -> Unit = {
 
                 println(a("One", "Two"))
                 println(c("One")("Two"))
+                val partiallyApplied = c("One")
+                println(partiallyApplied("Two"))
             """
     )
 }
