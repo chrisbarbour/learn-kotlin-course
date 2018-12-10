@@ -7,16 +7,23 @@ import app.runnableCode
 import markdown
 import react.RBuilder
 import react.dom.code
+import react.dom.li
+import react.dom.ul
 
 val types: RBuilder.() -> Unit = {
     markdown("# Classes and Types")
     classes()
+    divider()
+    dataClasses()
     divider()
     inheritance()
     divider()
     interfaces()
     divider()
     multipleInheritance()
+    divider()
+    generics()
+
     divider()
     typeTree()
     divider()
@@ -101,6 +108,124 @@ val classes: RBuilder.() -> Unit = {
     """.trimIndent())
 
 }
+
+val dataClasses: RBuilder.() -> Unit = {
+    markdown("## Data Classes")
+    markdown("One of the standout features of Kotlin data classes are Java POJOs on steroids")
+    ul {
+        li { +"A default data class comes with its own toString, hashcode and equals method" }
+        li { +"Properties set as var have getters as setters" }
+        li { +"Properties set as vals have getters" }
+        li { +"The copy method can be used as a convenient way to create a new immutable data class with 'updated' properties" }
+    }
+
+
+    annotatedCode(
+            annotation = """ """.trimMargin(),
+            code = """
+      | data class MutableCar(var colour: String, var make: String, var model: String, var yearOfReg: Int)
+      | data class ImmutableCar(val colour: String, val make: String, val model: String, val yearOfReg: Int)
+      |
+      | val fiesta = MutableCar("Red", "Ford", "Fiesta", 1990)
+      | val escort = ImmutableCar("Red", "Ford", "Escort", 1990)
+      | fiesta.make = "Fiat"
+      | println(fiesta)
+      |
+      | val fiatEscort = escort.copy(make = "Fiat", yearOfReg = 2000)
+      | println(escort)
+      | println(fiatEscort)
+    """.trimMargin())
+}
+
+
+val generics: RBuilder.() -> Unit = {
+    markdown("## Generics")
+    annotatedCode(
+            annotation = """
+                Like Java Kotln classes can use Generic Paramaters
+            """.trimIndent(),
+            code = """
+                 data class Message<T>(val metadata: String, val payload: T)
+                 val stringMsg: Message<String> = Message("meta", "payload")
+                 val intMsg: Message<Int> = Message("meta", 23)
+            """.trimIndent()
+    )
+
+    annotatedCode(
+            annotation = """
+                Functions can also have generic parameters
+            """.trimIndent(),
+            code = """
+                 fun <A, B> aToB(a: A, f: (A) -> B): B = f(a)
+                 val i: Int = aToB("124"){it.toInt()}
+                 val s: String = aToB(124){it.toString()}
+            """.trimIndent()
+    )
+
+    annotatedCode(
+            annotation = """If a class returns a generic type from one of its methods the 'out' keyword allows classes
+                | to allow supertypes to reference an instance
+            """.trimMargin(),
+            code = """
+                data class Message<out T>(val metadata: String, val payload: T) {
+                    fun showPayLoad(): T = payload
+                }
+
+                val anyMsg: Message<Any> = Message("Foo", "payload")
+                val payload: Any = anyMsg.payload
+                println(payload)
+            """.trimIndent()
+    )
+
+
+    annotatedCode(
+            annotation = """If a class takes a generic type as a method paramaeter the 'in' keyword allows classes
+                | to allow subtypes to referencing an instance
+            """.trimMargin(),
+            code = """
+                data class Message<in T>(val metadata: String) {
+                    fun asString(t: T): String = t.toString()
+                }
+
+                val numMsg: Message<Number> = Message("Foo")
+                val dblMsg: Message<Double> = numMsg
+                assert(dblMsg is Message<Double>)
+                println(numMsg.appendPayLoad(2.0){dbl1, dbl2 -> dbl1 + dbl2})
+            """.trimIndent()
+    )
+
+    markdown("Constrants can be added to generic type ':' instead of Java's extends")
+    code {
+        attrs["lines"] = "true"
+        attrs["auto-indent"] = "true"
+        attrs["highlight-on-fly"] = "true"
+        +"""
+      | interface Animal {
+      |   fun makeNoise(): String
+      | }
+      | class Dog: Animal {
+      |   override fun makeNoise(): String = "bark"
+      |  }
+      | class Cat: Animal {
+      |   override fun makeNoise(): String = "meow"
+      |  }
+      |
+      | class AnimalOps<A: Animal>(val a: A) {
+      |     fun makeNoise(): String = "animal making noise ${'$'}{a.makeNoise()}"
+      | }
+      | fun main() {
+      |   val catOps: AnimalOps<Animal> = AnimalOps(Cat())
+      |   val dogOps: AnimalOps<Animal> = AnimalOps(Dog())
+      |
+      |   println(catOps.makeNoise())
+      |   println(dogOps.makeNoise())
+      | }
+      |
+      """.trimMargin()
+    }
+
+}
+
 val inheritance: RBuilder.() -> Unit = {
     markdown("## Inheritance")
     markdown("""Kotlin makes classes final by default to avoid ad hoc and messy hierarchies
@@ -361,16 +486,6 @@ val sealedClasses: RBuilder.() -> Unit = {
     """.trimIndent(), inMain = false)
 }
 /**
-# Classes and Types
-...
-## Classes
-...
-## Data Classes
-...
-## Interfaces
-...
-# Inheritance
-...
 ## Kotlin Type Tree
 ...
 ## Nothing
