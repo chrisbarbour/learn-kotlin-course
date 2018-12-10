@@ -17,7 +17,7 @@ val types: RBuilder.() -> Unit = {
                 # Inheritance
                 ...
                 ## Kotlin Type Tree
-                ...
+                ![](typeTree.png)
                 ## Nothing
                 ... Talk about Nothing extending Everything including Unit
                 ## Generics
