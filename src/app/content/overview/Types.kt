@@ -24,6 +24,8 @@ val types: RBuilder.() -> Unit = {
     divider()
     nothing()
     divider()
+    sealedClasses()
+    divider()
     objectsAndCompanions()
     divider()
     typeAliases()
@@ -322,6 +324,37 @@ val typeAliases: RBuilder.() -> Unit = {
         fun main(){
             doSomething {
                 "Hi"
+            }
+        }
+    """.trimIndent(), inMain = false)
+}
+
+val sealedClasses: RBuilder.() -> Unit = {
+    markdown("""
+        # Sealed Classes
+
+        A sealed class is simply a class that can only be extended by classes defined within it.
+
+        > Sealed classes are also known as algebraic data types
+
+    """.trimIndent())
+
+    runnableCode("""
+        sealed class Event {
+            data class NormalEvent(val payload: String): Event()
+            data class ErrorEvent(val error: Exception): Event()
+        }
+
+        // The compiler now knows that an Event can only ever be either a NormalEvent or an ErrorEvent
+        // This makes the when expression work nicely with the sealed type
+        fun main(){
+            val events = listOf(Event.NormalEvent("EVENT!"), Event.ErrorEvent(IllegalArgumentException("BadEvent")))
+            events.forEachIndexed { index, it ->
+                print("${'$'}index. ")
+                when(it){
+                    is Event.NormalEvent -> println("Good Event with payload: ${'$'}{it.payload}")
+                    is Event.ErrorEvent -> println("Bad Event")
+                }
             }
         }
     """.trimIndent(), inMain = false)
