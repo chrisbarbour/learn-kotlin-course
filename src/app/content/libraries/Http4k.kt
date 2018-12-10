@@ -236,11 +236,78 @@ val responses: RBuilder.() -> Unit = {
 }
 
 val filters: RBuilder.() -> Unit = {
-    markdown("# Working With Filters")
+    markdown("")
+    annotatedCode("""
+        # Working With Filters
+
+        The term filter comes from the pipes and filters pattern where messages are filtered by some process then piped to another filter in a chain.
+
+        In HTTP4K a filter is simply a function that takes an HttpHandler and returns another.
+
+        The result is a chain of filters that can be invoked before the request is actually processed into a response.
+
+        You can choose to do anything with a filter, many are provided for you.
+
+        * Basic Auth
+        * Try Catching
+        * Request Tracing
+        * CORS
+        * Cookie Handling
+        * Cache Control
+        * Debugging
+
+    """, """
+        interface Filter : (HttpHandler) -> HttpHandler
+    """, readOnly = true
+    )
+    annotatedCode("""
+        They can be applied as follows
+    """, """
+        ServerFilters.Cors(UnsafeGlobalPermissive).then(api).asServer(SunHttp(8080)).start()
+    """, readOnly = true
+    )
+    annotatedCode("""
+        You can build your own like this
+    """, """
+        val latencyFilter = Filter {
+        next: HttpHandler -> {
+            request: Request ->
+                val start = System.currentTimeMillis()
+                val response = next(request)
+                val latency = System.currentTimeMillis() - start
+                println("I took ${'$'}latency ms")
+                response
+        }
+    }
+    ServerFilters.Cors(UnsafeGlobalPermissive).then(latencyFilter).then(api).asServer(SunHttp(8080)).start()
+    """, readOnly = true
+    )
 }
 
 val lenses: RBuilder.() -> Unit = {
-    markdown("# Lenses and JSON")
+    annotatedCode("""
+        # Lenses
+        Lenses, not to be confused with functional lenses, allow you to get or set a part of an http message in a type safe way.
+
+        Lenses allow you to specify that a piece of an http message, like the body can be transformed into a specific type.
+
+        They are bi-directional.
+    """, """
+        import org.http4k.format.Jackson.auto
+
+        data class Movie(val name: String)
+
+        val movieLens = Body.auto<Movie>().toLens() // Bi-directional lens
+        val api = routes(
+            "/" bind Method.POST to { request: Request ->
+                val movieInfo = movieLens(request) // Extract Movie from request
+                Response(OK).with(
+                        movieLens of movieInfo // Inject it back into the response
+                )
+            }
+        )
+    """, readOnly = true
+    )
 }
 
 val http4k: RBuilder.() -> Unit = {
