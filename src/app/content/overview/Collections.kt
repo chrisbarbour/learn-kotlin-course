@@ -20,6 +20,11 @@ val collections: RBuilder.() -> Unit = {
 }
 
 private val basicCollectionTypes: RBuilder.() -> Unit = {
+    markdown("""
+        ### Collection Hierarchy
+        Standard collections are collections from Java, which are hidden behind interfaces. Creation of them is made by standard top-level functions listOf, setOf, mutableListOf etc..
+    """.trimIndent())
+    img(src = "collection-hierarchy.png"){ attrs.width = "800px"}
     annotatedCode(
             annotation = """
                 ## Basic Collection Types
@@ -29,7 +34,7 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
             """,
             code = """
                 val array = arrayOf("Wolverine", "Punisher", "Thor")
-                println(array)
+                array.forEach{println(it)}
             """
     )
     annotatedCode(
@@ -38,7 +43,7 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
             """,
             code = """
                 val intArray: IntArray = intArrayOf(1, 2, 3)
-                println(intArray)
+                intArray.forEach{println(it)}
             """
     )
     annotatedCode(
@@ -49,9 +54,11 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
     code = """
                val mutable = mutableListOf("Batman", "Superman", "Wonder Woman")
                mutable.add("Aquaman")
+               println(mutable)
 
                val immutable = listOf("Robin", "Raven", "Cyborg", "Starfire", "Beast Boy")
                // immutable.add("Storm")
+               println(immutable)
 
                /* Uncommenting the above will cause a compiler error as
                 immutable collections don't have the mutating functions */
@@ -67,9 +74,4 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
                |    println(set)
             """
     )
-    markdown("""
-        ### Collection Hierarchy
-        Standard collections are collections from native language Java, which are hidden behind interfaces. Creation of them is made by standard top-level functions listOf, setOf, mutableListOf etc..
-    """.trimIndent())
-    img(src = "collection-hierarchy.png"){ attrs.width = "800px"}
 }
