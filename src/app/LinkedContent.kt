@@ -22,7 +22,7 @@ class LinkedContent : RComponent<LinkedContent.Props, LinkedContent.State>() {
         div("container") {
             div("contents") {
                 sidebar(props.links, this@LinkedContent::linkSelected)
-                div {
+                div("content-block") {
                 props.links.flatMap { it.links }.forEach { link ->
                     val hidden = if(state.mounted == true)" hidden-not-displayed" else " hidden"
                         div("block" + if (link.name != (state.selected?.name ?: props.default)) hidden else "") {

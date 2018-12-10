@@ -178,6 +178,14 @@ private val nulls: RBuilder.() -> Unit = {
     markdown("### 1. Safe Access (?)")
     markdown("By adding a question mark you can safely access the property. The result will be null if the accessed object is null")
     runnableCode("println(myCar?.color)"){ hiddenCar() }
+    runnableCode("""
+        // Print out the value of the blue component of the color of myCar
+
+        data class Color(val red: Int?, val green: Int?, val blue: Int?)
+        data class Car(val color: Color?)
+        val myCar: Car? = Car(Color(255,100,20)) // A redish green car that could possibly be null even though it isn't
+        TODO()
+    """.trimIndent(), tryCode = true)
     markdown("### 2. Asserting Not Null (!!)")
     markdown("By adding a !! you can tell the compiler to stop worrying about it.")
     runnableCode("println(myCar!!.color)"){ hiddenCar() }
@@ -196,7 +204,7 @@ private val nulls: RBuilder.() -> Unit = {
         }
         """.trimIndent().trimMargin()){ hiddenCar() }
     markdown("## Elvis Operator")
-    markdown("You can also chose to use a nullable value if not null otherwise select a default value using the elvis operator")
+    markdown("You can also choose to use a nullable value if not null otherwise select a default value using the elvis operator")
     runnableCode("""
         val car: Car? = null
         val color = car?.color ?: "red" // car is null so result of car?.color is also null
@@ -291,6 +299,11 @@ private val pairs: RBuilder.() -> Unit = {
                 println("Map: ${'$'}backToMap")
             """
     )
+    runnableCode("""
+        // Create a map of Car Makes and Models and print it out
+        val makesAndModels = mapOf<String, String>(TODO())
+        println(makesAndModels)
+    """.trimIndent(), tryCode = true)
 }
 
 val general: RBuilder.() -> Unit = {
