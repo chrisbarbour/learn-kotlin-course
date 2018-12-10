@@ -3,6 +3,7 @@ package app.content.overview
 import Markdown
 import app.annotatedCode
 import app.divider
+import app.runnableCode
 import markdown
 import react.RBuilder
 import react.dom.code
@@ -16,7 +17,16 @@ val types: RBuilder.() -> Unit = {
     interfaces()
     divider()
     multipleInheritance()
-
+    divider()
+    typeTree()
+    divider()
+    unit()
+    divider()
+    nothing()
+    divider()
+    objectsAndCompanions()
+    divider()
+    typeAliases()
 }
 
 val classes: RBuilder.() -> Unit = {
@@ -119,6 +129,61 @@ val inheritance: RBuilder.() -> Unit = {
     }
 }
 
+val typeTree: RBuilder.() -> Unit = {
+    markdown("""
+        # Kotlin Type Tree
+
+        The kotlin type tree can be boiled down to four distinct groups at its most simple.
+
+        Here is a very basic depiction of the tree.
+
+        ![Types](typeTree.png)
+
+        > Basically put, Nothing is Everything and Everything is Anything
+    """.trimIndent())
+}
+
+val unit: RBuilder.() -> Unit = {
+    markdown("""
+        # Unit
+
+        In Java you had void, which was not really a type and was special.
+
+        In Kotlin we have a type in its place called Unit.
+
+        > Unit is an Any like all other things so it can be used like any other type
+
+    """.trimIndent())
+    runnableCode("""
+        fun doNothing(): Unit {} // Unit is implied anyway
+        println(doNothing()) // This function doesnt return anything but its return type is still a type (Unit)
+    """.trimIndent())
+}
+
+val nothing: RBuilder.() -> Unit = {
+    markdown("""
+        # Nothing
+
+        Kotlin has a very special type called Nothing.
+
+        Weirdly nothing is actually the subtype of all other things including Unit.
+
+        This means that no matter the return type of a function you can still return a Nothing.
+
+        The only difficulty is you cannot make a raw Nothing instance.
+
+        One example of the use of Nothing is the TODO() function used all over this course.
+
+        > Nothing instances are created when an exception is thrown
+
+    """.trimIndent())
+
+    runnableCode("""
+        fun blowUp(): String = TODO() // This is a Nothing (Which is a String and all other types too)
+        println(blowUp())
+    """.trimIndent())
+}
+
 val interfaces: RBuilder.() -> Unit = {
     markdown("## Interfaces")
     markdown("""Interfaces follow a similar convention to Java interfaces post version 8,
@@ -195,6 +260,72 @@ val multipleInheritanceCodeBlock: RBuilder.() -> Unit = {
         //"fun main(){\n//sampleStart\n //sampleEnd\n}"
     }
 }
+
+val objectsAndCompanions: RBuilder.() -> Unit = {
+    annotatedCode("""
+        # Objects and Companions
+
+        Kotlin does not have the static keyword like Java.
+
+        A static class in Java is one that is initialized with the JVM at startup and holds its state for the lifetime of the JVM.
+
+        This is exactly what Objects are in Kotlin. They are called Singletons.
+
+        > Objects are mostly like classes and can extend interfaces and other classes
+
+    """, """
+        // A normal Class
+        class Car
+        // An Object
+        object Car
+
+        // Both can be defined together using the companion keyword
+        class Car {
+            companion object {
+                // Companion objects can have optional bodies
+            }
+        }
+    """, readOnly = true)
+
+    runnableCode("""
+        // Create a companion object with a function called shinyCar that creates a new shiny Car
+
+        data class Car(val isShiny: Boolean = false) {
+
+        }
+
+        fun main(){
+            println(Car.shinyCar())
+        }
+
+    """.trimIndent(), inMain = false, tryCode = true)
+}
+
+val typeAliases: RBuilder.() -> Unit = {
+    markdown("""
+        # TypeAliases
+
+        The typealias keyword allows you to set an alias for any type in Kotlin.
+
+        This is typically used to hide a complex type or rename types that have conflicting names.
+
+        A good use case for them appears when requiring function types.
+
+        > The typealias keyword can only appear at the top of a kotlin file underneath imports
+    """.trimIndent())
+
+    runnableCode("""
+        typealias MyLambda = () -> String
+
+        fun doSomething(withThis: MyLambda) = println(withThis())
+
+        fun main(){
+            doSomething {
+                "Hi"
+            }
+        }
+    """.trimIndent(), inMain = false)
+}
 /**
 # Classes and Types
 ...
@@ -217,10 +348,4 @@ val multipleInheritanceCodeBlock: RBuilder.() -> Unit = {
 ## Enum Classes
 ...
 ## Sealed Classes
-...
-## Objects and Companions (Singletons)
-...
-## Type Aliases
-...
-## Singletons
  **/

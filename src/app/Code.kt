@@ -20,8 +20,8 @@ fun RBuilder.readOnlyCode(code: String, builder: RDOMBuilder<CODE>.() -> Unit = 
 fun RBuilder.runnableCode(code: String, inMain: Boolean = true, tryCode: Boolean = false, builder: RDOMBuilder<CODE>.() -> Unit = {}){
     div(classes = if (tryCode) "tryCode" else "") {
         code {
-            attrs["lines"] = "true"
-            attrs["highlight-on-fly"] = (!tryCode).toString()
+            attrs["lines"] = (!tryCode).toString()
+            attrs["highlight-on-fly"] = "true"
             if (inMain) +"fun main(){\n//sampleStart\n$code //sampleEnd\n}"
             else +code
             builder()

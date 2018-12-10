@@ -71,5 +71,8 @@ body {
 }
 
 .tryCode>div>div>div.executable-fragment.default>div.code-area._folded>div.CodeMirror.cm-s-default.CodeMirror-overlayscroll>div.CodeMirror-scroll>div.CodeMirror-gutters{
-    background-color: #38af59
+    background-color: #38af59;
+}
+.tryCode>div>div>div.executable-fragment.default>div.code-area._folded>div.CodeMirror.cm-s-default.CodeMirror-overlayscroll>div.CodeMirror-scroll>div.CodeMirror-gutters>.CodeMirror-linenumber{
+    color: white;
 }
