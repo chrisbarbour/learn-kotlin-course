@@ -20,6 +20,11 @@ val collections: RBuilder.() -> Unit = {
 }
 
 private val basicCollectionTypes: RBuilder.() -> Unit = {
+    markdown("""
+        ### Collection Hierarchy
+        Standard collections are collections from Java, which are hidden behind interfaces. Creation of them is made by standard top-level functions **listOf**, **setOf**, **mutableListOf** etc..
+    """.trimIndent())
+    img(src = "collection-hierarchy.png"){ attrs.width = "800px"}
     annotatedCode(
             annotation = """
                 ## Basic Collection Types
@@ -29,7 +34,7 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
             """,
             code = """
                 val array = arrayOf("Wolverine", "Punisher", "Thor")
-                println(array)
+                array.forEach{println(it)}
             """
     )
     annotatedCode(
@@ -38,7 +43,7 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
             """,
             code = """
                 val intArray: IntArray = intArrayOf(1, 2, 3)
-                println(intArray)
+                intArray.forEach{println(it)}
             """
     )
     annotatedCode(
@@ -49,9 +54,11 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
     code = """
                val mutable = mutableListOf("Batman", "Superman", "Wonder Woman")
                mutable.add("Aquaman")
+               println(mutable)
 
                val immutable = listOf("Robin", "Raven", "Cyborg", "Starfire", "Beast Boy")
                // immutable.add("Storm")
+               println(immutable)
 
                /* Uncommenting the above will cause a compiler error as
                 immutable collections don't have the mutating functions */
@@ -67,9 +74,38 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
                |    println(set)
             """
     )
-    markdown("""
-        ### Collection Hierarchy
-        Standard collections are collections from native language Java, which are hidden behind interfaces. Creation of them is made by standard top-level functions listOf, setOf, mutableListOf etc..
-    """.trimIndent())
-    img(src = "collection-hierarchy.png"){ attrs.width = "800px"}
+    annotatedCode(
+            annotation = """
+                ## Sequence
+                Sequences are a key abstraction to functional programming in Kotlin, a concept quite similar to Java 8 Streams.
+                Sequences enable you to easily operate upon collections of elements by chaining pure function calls with a rich fluent API.
+
+                Sequence type represents lazily evaluated collections.
+                Top-level functions for instantiating sequences and extension functions for sequences.
+            """,
+            code = """
+               |    val seq = sequenceOf("Penguin", "Joker", "Riddler")
+               |    seq.forEach{println(it)}
+            """
+    )
+    annotatedCode(
+            annotation = """
+                Sequences are lazy, so intermediate functions for Sequence processing don’t do any calculations.
+                Instead they return a new Sequence that decorates the previous one with a new operation.
+                All these computations are evaluated during terminal operation like toList or count.
+                On the other hand, functions for Iterable processing returns a new collection.
+            """,
+            code = """
+                |   sequenceOf(1,2,3)
+                |   .filter { println("Filter ${'$'}it, "); it % 2 == 1 }
+                |   .map { println("Map ${'$'}it, "); it * 2 }
+                |   .toList()
+                |
+                |   println()
+                |
+                |   listOf(1,2,3)
+                |   .filter { println("Filter ${'$'}it, "); it % 2 == 1 }
+                |   .map { println("Map ${'$'}it, "); it * 2 }
+            """
+    )
 }
