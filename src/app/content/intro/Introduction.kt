@@ -1,6 +1,7 @@
 package app.content.intro
 
 import Markdown
+import app.annotatedCode
 import app.runnableCode
 import markdown
 import react.RBuilder
@@ -62,5 +63,13 @@ val introduction: RBuilder.() -> Unit = {
     runnableCode("""
         println("Hello, World!")
     """.trimIndent())
+    annotatedCode(
+            annotation = "There will be snippets with a green banner. They will have TODO() elements that need replaced.\n Try them out",
+            code = """
+                // Replace TODO with a nice message in double quotes
+                val message: String = TODO()
+                println(message)
+            """, tryCode = true
+    )
     markdown("Lets get Started, We will begin with describing a Kotlin file, [Click Here](/ktFiles)")
 }

@@ -60,6 +60,15 @@ private val ranges: RBuilder.() -> Unit = {
                 println(sameRange.toList())
             """
     )
+
+    annotatedCode(
+            annotation = "",
+            code = """
+                // Print a range of numbers from 4 to 10
+                val range: IntRange = TODO()
+                println(range.toList())
+            """, tryCode = true
+    )
     annotatedCode(
             annotation = """
                 To reverse the order use downTo
