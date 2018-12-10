@@ -29,7 +29,7 @@ fun RBuilder.runnableCode(code: String, inMain: Boolean = true, tryCode: Boolean
     }
 }
 
-fun RBuilder.annotatedCode(annotation: String, code: String, trim: Boolean = true, readOnly: Boolean = false, tryCode: Boolean = false){
+fun RBuilder.annotatedCode(annotation: String = "", code: String, trim: Boolean = true, readOnly: Boolean = false, tryCode: Boolean = false){
     markdown(if(trim) annotation.trimIndent().trimMargin() else annotation)
     if(readOnly) readOnlyCode(if(trim) code.trimIndent().trimMargin() else code)
     else runnableCode(if(trim) code.trimIndent().trimMargin() else code, tryCode = tryCode)

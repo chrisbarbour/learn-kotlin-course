@@ -23,6 +23,16 @@ private val stringInterpolation: RBuilder.() -> Unit = {
                 println("You can also use \${'$'}{...} to execute code inline like this: ${'$'}{ hello + world }")
             """
     )
+    annotatedCode(
+            code = """
+                // Print out the sum of the following two numbers using string interpolation
+                // The result should read 'The sum of 100 and 20 is 120'
+                val a = 100
+                val b = 20
+                TODO()
+            """,
+            tryCode = true
+    )
 }
 
 private val runtimeInstanceChecking: RBuilder.() -> Unit = {
@@ -37,6 +47,15 @@ private val runtimeInstanceChecking: RBuilder.() -> Unit = {
                 println(abc::class.java) // Gets a Java Class<T>
             """
     )
+    annotatedCode(code = """
+        // Here is a list of items with different types
+        // Print out the type of each element using runtime instance checking
+
+        val items = listOf(1, "2", 3L, 4f, 5.0)
+        // For example - you can use [] to get an item from an array
+        val firstItem = items[0]
+        TODO()
+    """.trimIndent(), tryCode = true)
     annotatedCode(
             annotation = "You can also check if the type of something matches a specific type using the **is** keyword",
             code = """
@@ -117,6 +136,14 @@ private val ranges: RBuilder.() -> Unit = {
                 println(range.toList())
                 println(sameRange.toList())
             """
+    )
+
+    annotatedCode(
+            code = """
+                // Print all the odd numbers from 101 down to 9 using ranges
+                TODO()
+            """,
+            tryCode = true
     )
 }
 private val nulls: RBuilder.() -> Unit = {

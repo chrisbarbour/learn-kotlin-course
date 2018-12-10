@@ -1,39 +1,43 @@
 package app.content.overview
 
 import app.annotatedCode
+import app.divider
 import markdown
 import react.RBuilder
-import react.dom.img
-
 val variables: RBuilder.() -> Unit = {
 
-    markdown("# Values and Variable")
-    annotatedCode(
-            annotation = """
-                ## Values
-                Used to create an immutable reference to an object
-                > val fooBarBaz = "foo" + "bar" + "baz"
+    markdown("# Values and Variables")
+    annotatedCode("""
+         ## Values (val)
 
-                ## Variables
-                Creates an mutable reference to an object
-                > var fooBarBaz = "foo" + "bar" + "baz"
-                >
-                > fooBarBaz = "" //compiles
+         Used to create an immutable reference to an object
+    """, """val fooBarBaz = "foo" + "bar" + "baz"""", readOnly = true)
+    annotatedCode("""
+         Types can be inferred explicitly or implicitly.
 
-            """,
-            code = """
-                //variable allowed to be updated
-                var j = 3
-                j = 5
+         To define a type explicitly place it after a colon beside the name of the variable.
 
-                //compiler will not allow
-                val i = 3
-                i = 5
-            """
-    )
-    img(src = "valnotvar.jpg") { attrs.width = "300px" }
+    """, """
+        val i = 1 //implicitly Typed as an Int
+        val j: Int = 1 // explicitly an Int
+    """, readOnly = true)
+    annotatedCode("""
+         ## Variables (var)
+        Creates a mutable reference to an object
+    """, """
+        var fooBarBaz = "foo" + "bar" + "baz"
+        fooBarBaz = "" // compiles
+        val immutable = "foo"
+        immutable = "" // Does not compile
+    """, readOnly = true)
+    annotatedCode("""
+         Var type inference is the same as val
+    """, """
+        var i = 1 //implicitly Typed as an Int
+        var j: Int = 1 // explicitly an Int
+    """, readOnly = true)
     markdown("""
-                > Note: Val/Var only makes the reference not the object muttable/imuttable
+                ### Note: Val/Var only makes the reference not the object mutable/immutable
   """.trimIndent())
     annotatedCode(annotation = "", code = """
     //immutable reference to mutable object
@@ -41,7 +45,7 @@ val variables: RBuilder.() -> Unit = {
     list.add(5)
     println(list)
   """.trimIndent())
-
+    divider()
     markdown("# Expressions vs Statements")
     annotatedCode(
             annotation = """
@@ -50,7 +54,7 @@ val variables: RBuilder.() -> Unit = {
     """,
             code = """
       //if expression
-      val expr = if(1 < 2) {
+      val expr: String = if(1 < 2) {
       "foo"
       } else {
       "bar"
@@ -58,7 +62,7 @@ val variables: RBuilder.() -> Unit = {
       println(expr)
 
       //try expression
-      val tryExpr  = try {
+      val tryExpr: Int  = try {
         "foo".toInt()
       } catch(e: Exception) {
         7
