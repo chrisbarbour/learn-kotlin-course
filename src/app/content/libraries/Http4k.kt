@@ -297,14 +297,14 @@ val lenses: RBuilder.() -> Unit = {
     """, """
         import org.http4k.format.Jackson.auto
 
-        data class Movie(val name: String)
+        data class Car(val name: String)
 
-        val movieLens = Body.auto<Movie>().toLens() // Bi-directional lens
+        val carLens = Body.auto<Car>().toLens() // Bi-directional lens
         val api = routes(
             "/" bind Method.POST to { request: Request ->
-                val movieInfo = movieLens(request) // Extract Movie from request
+                val carInfo = carLens(request) // Extract Car from request
                 Response(OK).with(
-                        movieLens of movieInfo // Inject it back into the response
+                        carLens of carInfo // Inject it back into the response
                 )
             }
         )
