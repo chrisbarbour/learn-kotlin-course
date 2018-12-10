@@ -2,8 +2,10 @@ package app.content.libraries
 
 import app.annotatedCode
 import app.divider
+import app.readOnlyCode
 import markdown
 import react.RBuilder
+import react.dom.div
 import react.dom.img
 import react.dom.p
 
@@ -310,6 +312,39 @@ val lenses: RBuilder.() -> Unit = {
     )
 }
 
+val excercise: RBuilder.() -> Unit = {
+    markdown("""
+        # Exercise
+
+        Build an api with the following specification:
+
+        > /car  GET returns all cars in JSON array
+
+        > /car POST creates a new car and returns location in Location header (Status code 201)
+
+        > /car/{id} GET returns car as JSON with id
+
+        > /car/{id} DELETE deletes car with id
+
+        **Guide**
+
+        * You will need to create a class for Car
+        * Use Lenses for mapping to and from a Car(s)
+        * You won't need filters but feel free to add some
+        * Everything you need is on this page somewhere, I hope :)
+
+    """.trimIndent())
+    readOnlyCode("""
+        // Use this for some data
+        val cars = listOf(
+            Car("Nissan", "350z"),
+            Car("BMW", "i8"),
+            Car("Chevrolet", "Trax"),
+            Car("Hyundai", "Sante Fe")
+        )
+    """.trimIndent())
+}
+
 val http4k: RBuilder.() -> Unit = {
     intro()
     markdown("For this section of the course we are going to build an app using http4k")
@@ -327,4 +362,6 @@ val http4k: RBuilder.() -> Unit = {
     lenses()
     divider()
     filters()
+    divider()
+    excercise()
 }
