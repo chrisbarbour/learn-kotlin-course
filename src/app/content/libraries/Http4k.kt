@@ -31,7 +31,7 @@ val projectSetup: RBuilder.() -> Unit = {
     markdown("""
         # Project Setup
 
-        1. Create a new maven project in IntelliJ called 'kotlin-movie-api'
+        1. Create a new maven project in IntelliJ called 'kotlin-car-api'
 
         2. Rename src/main/java to src/main/kotlin and src/test/java to src/test/kotlin"
 
@@ -53,7 +53,7 @@ val projectSetup: RBuilder.() -> Unit = {
         <modelVersion>4.0.0</modelVersion>
 
         <groupId>com.kotlin.learn</groupId>
-        <artifactId>kotlin-movie-api</artifactId>
+        <artifactId>kotlin-car-api</artifactId>
         <version>1.0-SNAPSHOT</version>
 
         <properties>
@@ -194,11 +194,11 @@ val requests: RBuilder.() -> Unit = {
 
         You can define routes with path parameters like this
     """, """
-        // This endpoint will require a movieId
-        "/movie/{movieId}" bind Method.GET to { request: Request ->
+        // This endpoint will require a carId
+        "/car/{carId}" bind Method.GET to { request: Request ->
             // To get the parameter
-            val movieId: String? = request.path("movieId")
-            Response(OK).body("Found movie with id: ${'$'}movieId")
+            val carId: String? = request.path("carId")
+            Response(OK).body("Found Car with id: ${'$'}carId")
         }
     """, readOnly = true
     )
@@ -211,9 +211,9 @@ val requests: RBuilder.() -> Unit = {
 
         > Check out Lenses below for a better solution.
     """, """
-        "/movie" bind Method.POST to { request: Request ->
+        "/car" bind Method.POST to { request: Request ->
             // To get the body
-            val movieInfo: String = request.body.payload.asString()
+            val carInfo: String = request.body.payload.asString()
             ...
         }
     """, readOnly = true
