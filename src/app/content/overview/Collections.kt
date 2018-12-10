@@ -22,7 +22,7 @@ val collections: RBuilder.() -> Unit = {
 private val basicCollectionTypes: RBuilder.() -> Unit = {
     markdown("""
         ### Collection Hierarchy
-        Standard collections are collections from Java, which are hidden behind interfaces. Creation of them is made by standard top-level functions listOf, setOf, mutableListOf etc..
+        Standard collections are collections from Java, which are hidden behind interfaces. Creation of them is made by standard top-level functions **listOf**, **setOf**, **mutableListOf** etc..
     """.trimIndent())
     img(src = "collection-hierarchy.png"){ attrs.width = "800px"}
     annotatedCode(
@@ -72,6 +72,40 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
             code = """
                |    val set = setOf("Spider-man", "Hawkman", "Arrow", "The Flash", "Arrow")
                |    println(set)
+            """
+    )
+    annotatedCode(
+            annotation = """
+                ## Sequence
+                Sequences are a key abstraction to functional programming in Kotlin, a concept quite similar to Java 8 Streams.
+                Sequences enable you to easily operate upon collections of elements by chaining pure function calls with a rich fluent API.
+
+                Sequence type represents lazily evaluated collections.
+                Top-level functions for instantiating sequences and extension functions for sequences.
+            """,
+            code = """
+               |    val seq = sequenceOf("Penguin", "Joker", "Riddler")
+               |    seq.forEach{println(it)}
+            """
+    )
+    annotatedCode(
+            annotation = """
+                Sequences are lazy, so intermediate functions for Sequence processing don’t do any calculations.
+                Instead they return a new Sequence that decorates the previous one with a new operation.
+                All these computations are evaluated during terminal operation like toList or count.
+                On the other hand, functions for Iterable processing returns a new collection.
+            """,
+            code = """
+                |   sequenceOf(1,2,3)
+                |   .filter { println("Filter ${'$'}it, "); it % 2 == 1 }
+                |   .map { println("Map ${'$'}it, "); it * 2 }
+                |   .toList()
+                |
+                |   println()
+                |
+                |   listOf(1,2,3)
+                |   .filter { println("Filter ${'$'}it, "); it % 2 == 1 }
+                |   .map { println("Map ${'$'}it, "); it * 2 }
             """
     )
 }
