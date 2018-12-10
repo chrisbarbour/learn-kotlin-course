@@ -21,7 +21,7 @@ val collections: RBuilder.() -> Unit = {
 
 private val basicCollectionTypes: RBuilder.() -> Unit = {
     markdown("""
-        ### Collection Hierarchy
+        ## Collection Hierarchy
         Standard collections are collections from Java, which are hidden behind interfaces. Creation of them is made by standard top-level functions **listOf**, **setOf**, **mutableListOf** etc..
     """.trimIndent())
     img(src = "collection-hierarchy.png"){ attrs.width = "800px"}
@@ -49,7 +49,8 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
     annotatedCode(
             annotation = """
                 ### List
-                An unorder collection that does not support duplicate entries
+                List, Set, and Map are all interfaces which are implemented by many different classes.
+                An ordered collection of elements.
             """,
     code = """
                val mutable = mutableListOf("Batman", "Superman", "Wonder Woman")
@@ -106,6 +107,49 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
                 |   listOf(1,2,3)
                 |   .filter { println("Filter ${'$'}it, "); it % 2 == 1 }
                 |   .map { println("Map ${'$'}it, "); it * 2 }
+            """
+    )
+    annotatedCode(
+            annotation = """
+                |   ## Collection extension functions
+                |
+                |   The standard libraries collection & sequence package offers various extension functions to ease working with collections
+                |
+                |   ### Transformation functions
+                |
+                |   Kotlin offers extension functions to transform between different collection types.
+            """,
+            code = """
+                |   val set = listOf("Spider-man", "Hawkman", "Arrow", "The Flash", "Arrow").toSet()
+                |   println(set)
+                |
+                |   val setlist = setOf("Robin", "Raven", "Cyborg", "Starfire", "Beast Boy").toList()
+                |   println(setlist)
+                |
+                |   val list = sequenceOf("Penguin", "Joker", "Riddler").toList()
+                |   println(list)
+                |
+                |   val sequence = listOf("Wolverine", "Punisher", "Thor").asSequence()
+                |   sequence.forEach {println(it)}
+            """
+    )
+    annotatedCode(
+            annotation = """
+                |   ### Checks functions
+                |
+                |   Functions are offered to check the state of the collection.
+            """,
+            code = """
+                |  val intList = listOf(1, 2, 3)
+                |
+                |  val all = intList.all { it < 4 } // All of them are less than 4
+                |  println(all)
+                |
+                |  val any = intList.any() // Collection has elements
+                |  println(any)
+                |
+                |  val contains = intList.contains(3) // Collection contains value of 3
+                |  println(contains)
             """
     )
 }
