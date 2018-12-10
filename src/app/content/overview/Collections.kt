@@ -23,11 +23,11 @@ val collections: RBuilder.() -> Unit = {
 }
 private val mapFilter: RBuilder.() -> Unit = {
     annotatedCode("""
-        # Filter, Map, FlatMap, Reduce, Fold
+        # Filter, Map, FlatMap, Fold
 
         The Kotlin standard library comes with many useful functions that can be found in other languages like Scala or C#.
 
-        Filter, Map, FlatMap, Reduce and Fold are all added to the collection libraries to help with many different tasks dealing with collections of things.
+        Filter, Map, FlatMap and Fold are all added to the collection libraries to help with many different tasks dealing with collections of things.
 
         Each of these functions are known as higher order functions because they take a function as an argument, See [Functions](functions).
 
@@ -109,6 +109,41 @@ private val mapFilter: RBuilder.() -> Unit = {
         val cars: List<Car> = TODO()
         println(cars)
     """.trimIndent(), tryCode = true)
+
+    annotatedCode(
+            """
+            ## Fold
+
+            Fold takes a collection of items and rolls over them collecting state as it goes.
+
+            How it does it and what it collects is up to you.
+
+            Fold takes two arguments, an initial state and an operation that takes the current item and previous state and returns the next state.
+
+        """, """
+            inline fun <T, R> Array<out T>.fold(initial: R, operation: (acc: R, T) -> R): R
+        """, readOnly = true
+    )
+    runnableCode("""
+        // We can use Fold to build up a String for example
+
+        val intList = listOf(1,6,5,3,7,4,3,6,7)
+
+        val intString = intList.fold("") { string, number -> string + number } // The type (String) is inferred from the initial value
+
+        println(intString)
+    """.trimIndent())
+
+    runnableCode("""
+        // Use Fold to find the sum of these numbers
+
+        val intList = listOf(1,6,5,3,7,4,3,6,7)
+
+        val sum = TODO()
+
+        println(sum)
+    """.trimIndent(), tryCode = true)
+
 }
 
 private val basicCollectionTypes: RBuilder.() -> Unit = {
