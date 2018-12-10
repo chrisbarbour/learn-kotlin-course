@@ -2,6 +2,7 @@ package app.content.overview
 
 import Markdown
 import app.annotatedCode
+import app.divider
 import markdown
 import react.RBuilder
 import react.dom.img
@@ -25,6 +26,7 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
         Standard collections are collections from Java, which are hidden behind interfaces. Creation of them is made by standard top-level functions **listOf**, **setOf**, **mutableListOf** etc..
     """.trimIndent())
     img(src = "collection-hierarchy.png"){ attrs.width = "800px"}
+    divider()
     annotatedCode(
             annotation = """
                 ## Basic Collection Types
@@ -75,6 +77,7 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
                |    println(set)
             """
     )
+    divider()
     annotatedCode(
             annotation = """
                 ## Sequence
@@ -109,6 +112,7 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
                 |   .map { println("Map ${'$'}it, "); it * 2 }
             """
     )
+    divider()
     annotatedCode(
             annotation = """
                 |   ## Collection extension functions
@@ -150,6 +154,61 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
                 |
                 |  val contains = intList.contains(3) // Collection contains value of 3
                 |  println(contains)
+            """
+    )
+    annotatedCode(
+            annotation = """
+                |   ### Transf­ormer functions
+                |
+                |   Functions are offered to transf­orm the state of the collection.
+            """,
+    code = """
+                |  val intList = listOf(1, 2, 3)
+                |
+                |  val mapped = intList.map { it + 1 } // Returns a new list by transforming all elements from the initial Iterable
+                |  println(mapped)
+                |
+                |  val sliced = intList.slice(1..2) // Takes a range from collection based on indexes
+                |  println(sliced)
+                |
+                |  val sorted = intList.sorted() // Returns a list of all elements sorted according to their natural sort order
+                |  println(sorted)
+            """
+    )
+    annotatedCode(
+            annotation = """
+                |   ### Aggreg­ator functions
+                |
+                |   Functions are offered to support aggregation of the collection.
+            """,
+            code = """
+                |   val intList = listOf(1, 2, 3)
+                |
+                |   val count = intList.count() // Returns the size of the list
+                |   println(count)
+                |
+                |   val max = intList.max() // Maximum value in the list.
+                |   println(max)
+                |
+                |   val min = intList.min() // Minimum value in the list.
+                |   println(min)
+                |
+                |   /* Accumulates values starting with initial and applying operation from left to right.
+                |   Lambda receives accumulated value and current value. */
+                |
+                |   val folded = intList.fold(10) { accumulator, value ->
+                |       accumulator + value
+                |   }
+                |   println(folded)
+                |
+                |
+                |   /* Accumulates values starting with first value and applying operation from left to right.
+                |   Lambda receives accumulated value and current value. */
+                |
+                |   val reduced = intList.reduce { accumulator, value ->
+                |       accumulator + value
+                |   }
+                |   println(reduced)
             """
     )
 }
