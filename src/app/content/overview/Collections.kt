@@ -3,6 +3,7 @@ package app.content.overview
 import Markdown
 import app.annotatedCode
 import app.divider
+import app.runnableCode
 import markdown
 import react.RBuilder
 import react.dom.img
@@ -18,6 +19,96 @@ val collections: RBuilder.() -> Unit = {
                 """.trimIndent().trimMargin()
     }
     basicCollectionTypes()
+    mapFilter()
+}
+private val mapFilter: RBuilder.() -> Unit = {
+    annotatedCode("""
+        # Filter, Map, FlatMap, Reduce, Fold
+
+        The Kotlin standard library comes with many useful functions that can be found in other languages like Scala or C#.
+
+        Filter, Map, FlatMap, Reduce and Fold are all added to the collection libraries to help with many different tasks dealing with collections of things.
+
+        Each of these functions are known as higher order functions because they take a function as an argument, See [Functions](functions).
+
+        ## Filter
+
+        Filter does what it says on the tin, it filters. You give it a function that tells it to remove the item (false) or keep it (true).
+
+    """, "inline fun <T> Iterable<T>.filter(predicate: (T) -> Boolean): List<T>", readOnly = true)
+    runnableCode("""
+        // A Filter that keeps items greater than 5
+        val filteredList = listOf(1,6,5,3,7,4,3,6,7).filter { it > 5 } // Notice the braces
+        println(filteredList)
+    """.trimIndent())
+    runnableCode("""
+        // Filter the list of strings so that only string of length smaller than 4 exist
+        val originalList = listOf("a", "abc", "def", "abcdef", "defghi", "adfddds", "z")
+        val filteredList: List<String> = TODO()
+        println(filteredList)
+    """.trimIndent(), tryCode = true)
+
+    annotatedCode("""
+        ## Map
+
+        The map function maps one list of items onto another list of items.
+
+        You provide a transformation function that converts a single item into something else and the result is a collection of those items.
+    """, """
+        inline fun <T, R> Array<out T>.map(transform: (T) -> R): List<R>
+    """, readOnly = true)
+    runnableCode("""
+        // Map a list of Integers into a list of Strings
+        val mappedList = listOf(1,6,5,3,7,4,3,6,7).map { "XX ${'$'}it XX" }
+        println(mappedList)
+    """.trimIndent())
+    runnableCode("""
+        // Create a list of Cars from a list of Car models using the map function
+
+        data class Car(val model: String)
+        val models = listOf("350z", "Micra", "Juke")
+        val cars: List<Car> = TODO()
+        println(cars)
+    """.trimIndent(), tryCode = true)
+
+    annotatedCode(
+        """
+            ## FlatMap
+
+            FlatMap is a bit more fancy than just map. With Map you are building a new list of items returned from your transformation function.
+
+            FlatMap does something similar except that it expects each transform to yield a list of items.
+
+            Each list is then flattened.
+        """, """
+            inline fun <T, R> Array<out T>.flatMap(transform: (T) -> Iterable<R>): List<R>
+        """, readOnly = true
+    )
+    runnableCode("""
+        // Here is the same example from map above
+        // This time each item will transform to a list of Strings prefixing the number with A, B and C
+        val mappedList = listOf(1,6,5,3,7,4,3,6,7).map { listOf("A${'$'}it", "B${'$'}it", "C${'$'}it") }
+        println(mappedList) // This is a list of lists of strings
+
+        //Here is the same but with flat map
+        val flatMappedList = listOf(1,6,5,3,7,4,3,6,7).flatMap { listOf("A${'$'}it", "B${'$'}it", "C${'$'}it") }
+        println(flatMappedList) // This is a list of strings
+    """.trimIndent())
+
+    runnableCode("""
+        // Create a list of Cars from a map of makes and models using flatMap
+
+        // Hint: You will need map for this one too
+
+        data class Car(val make: String, val model: String)
+
+        val makeModels = mapOf(
+            "Nissan" to listOf("350z", "Micra", "Juke"),
+            "Ford" to listOf("Fiesta", "Mustang", "GT")
+        )
+        val cars: List<Car> = TODO()
+        println(cars)
+    """.trimIndent(), tryCode = true)
 }
 
 private val basicCollectionTypes: RBuilder.() -> Unit = {
@@ -177,7 +268,7 @@ private val basicCollectionTypes: RBuilder.() -> Unit = {
     )
     annotatedCode(
             annotation = """
-                |   ### Aggreg­ator functions
+                |   ### Aggregator functions
                 |
                 |   Functions are offered to support aggregation of the collection.
             """,
