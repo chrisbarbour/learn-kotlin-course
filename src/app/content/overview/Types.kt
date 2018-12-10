@@ -351,10 +351,11 @@ val sealedClasses: RBuilder.() -> Unit = {
             val events = listOf(Event.NormalEvent("EVENT!"), Event.ErrorEvent(IllegalArgumentException("BadEvent")))
             events.forEachIndexed { index, it ->
                 print("${'$'}index. ")
-                when(it){
-                    is Event.NormalEvent -> println("Good Event with payload: ${'$'}{it.payload}")
-                    is Event.ErrorEvent -> println("Bad Event")
+                val message = when(it){ // Compiler will only let you do all scenarios
+                    is Event.NormalEvent -> "Good Event with payload: ${'$'}{it.payload}"
+                    is Event.ErrorEvent -> "Bad Event"
                 }
+                println(message)
             }
         }
     """.trimIndent(), inMain = false)
