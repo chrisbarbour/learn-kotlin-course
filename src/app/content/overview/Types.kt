@@ -190,7 +190,6 @@ val generics: RBuilder.() -> Unit = {
                 val numMsg: Message<Number> = Message("Foo")
                 val dblMsg: Message<Double> = numMsg
                 assert(dblMsg is Message<Double>)
-                println(numMsg.appendPayLoad(2.0){dbl1, dbl2 -> dbl1 + dbl2})
             """.trimIndent()
     )
 
